@@ -550,6 +550,213 @@ footer{
 <footer>
   © 2026 VIXO. Learning. Analysis. Discipline.
 </footer>
+  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+  const SUPABASE_URL = "https://coppwuqtxplzdcqzeoxj.supabase.co";
+
+  // MASUKKAN PUBLISHABLE KEY MILIKMU DI SINI
+  const SUPABASE_KEY = "sb_publishable_5qUeiFWGWkcfpiBKyCXp8g_IUPzMOmb";
+
+  const { createClient } = supabase;
+  const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Login screen
+  const loginScreen = document.createElement("div");
+
+  loginScreen.innerHTML = `
+    <div id="vixo-login">
+      <div class="login-box">
+        <div class="login-logo">VIX<span>O</span></div>
+        <div class="login-title">VIXO MARKET BOARD</div>
+        <div class="login-subtitle">
+          Login untuk mengakses VIXO.
+        </div>
+
+        <input id="vixo-email"
+          type="email"
+          placeholder="Email"
+          autocomplete="email">
+
+        <input id="vixo-password"
+          type="password"
+          placeholder="Password"
+          autocomplete="current-password">
+
+        <button id="vixo-login-btn">LOGIN</button>
+
+        <button id="vixo-signup-btn" class="signup-btn">
+          CREATE ACCOUNT
+        </button>
+
+        <p id="vixo-message"></p>
+      </div>
+    </div>
+  `;
+
+  document.body.prepend(loginScreen);
+
+  const style = document.createElement("style");
+
+  style.textContent = `
+    #vixo-login {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #0d1011;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 390px;
+      padding: 35px 25px;
+      background: #131719;
+      border: 1px solid #292f2d;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+
+    .login-logo {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: #f0f0ee;
+      margin-bottom: 18px;
+    }
+
+    .login-logo span {
+      color: #b8d13f;
+    }
+
+    .login-title {
+      color: #f0f0ee;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .login-subtitle {
+      color: #8f9794;
+      font-size: 13px;
+      margin: 10px 0 25px;
+    }
+
+    #vixo-email,
+    #vixo-password {
+      width: 100%;
+      padding: 13px;
+      margin-bottom: 12px;
+      background: #0d1011;
+      color: #fff;
+      border: 1px solid #303634;
+      border-radius: 8px;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    #vixo-email:focus,
+    #vixo-password:focus {
+      border-color: #b8d13f;
+    }
+
+    #vixo-login-btn,
+    .signup-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    #vixo-login-btn {
+      border: none;
+      background: #b8d13f;
+      color: #10130f;
+    }
+
+    .signup-btn {
+      margin-top: 10px;
+      background: transparent;
+      color: #b8d13f;
+      border: 1px solid #39402c;
+    }
+
+    #vixo-message {
+      min-height: 20px;
+      margin-top: 15px;
+      color: #9da5a2;
+      font-size: 12px;
+    }
+  `;
+
+  document.head.appendChild(style);
+
+  const screen = document.getElementById("vixo-login");
+  const email = document.getElementById("vixo-email");
+  const password = document.getElementById("vixo-password");
+  const message = document.getElementById("vixo-message");
+
+  async function checkUser() {
+    const { data } = await client.auth.getSession();
+
+    if (data.session) {
+      screen.style.display = "none";
+    } else {
+      screen.style.display = "flex";
+    }
+  }
+
+  document.getElementById("vixo-login-btn").onclick = async () => {
+    message.textContent = "Logging in...";
+
+    const { error } = await client.auth.signInWithPassword({
+      email: email.value,
+      password: password.value
+    });
+
+    if (error) {
+      message.textContent = error.message;
+      return;
+    }
+
+    message.textContent = "Login berhasil.";
+    screen.style.display = "none";
+  };
+
+  document.getElementById("vixo-signup-btn").onclick = async () => {
+    message.textContent = "Creating account...";
+
+    const { error } = await client.auth.signUp({
+      email: email.value,
+      password: password.value
+    });
+
+    if (error) {
+      message.textContent = error.message;
+      return;
+    }
+
+    message.textContent =
+      "Account dibuat. Cek email kamu untuk konfirmasi.";
+  };
+
+  client.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      screen.style.display = "none";
+    } else {
+      screen.style.display = "flex";
+    }
+  });
+
+  checkUser();
+</script>
+  
 </body>
 </html>
