@@ -1,195 +1,555 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>VIXO — Technical Trading Learning</title>
+<title>VIXO — Market Board</title>
 
-  <meta name="description" content="VIXO — A learning platform dedicated to technical trading, market analysis, and price action.">
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+html{
+  scroll-behavior:smooth;
+}
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #111416;
-      color: #f1f3f2;
-      line-height: 1.6;
-    }
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#0d1011;
+  color:#edf0ee;
+  line-height:1.6;
+}
 
-    header {
-      min-height: 92vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 20px;
-      background:
-        radial-gradient(
-          circle at 50% 30%,
-          #29302d 0,
-          #111416 55%
-        );
-    }
+nav{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(13,16,17,.96);
+  border-bottom:1px solid #292f2d;
+}
 
-    .wrap {
-      max-width: 850px;
-    }
+.nav{
+  max-width:1100px;
+  margin:auto;
+  padding:15px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 
-    .mark {
-      font-size: 72px;
-      font-weight: 900;
-      letter-spacing: 12px;
-      color: #dfe3e1;
-      text-shadow: 0 0 24px rgba(190, 210, 200, 0.12);
-    }
+.logo{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:5px;
+}
 
-    .line {
-      width: 90px;
-      height: 4px;
-      background: #b8d13f;
-      margin: 22px auto;
-    }
+.logo span{
+  color:#b8d13f;
+}
 
-    h1 {
-      font-size: clamp(32px, 6vw, 62px);
-      letter-spacing: 2px;
-      margin-bottom: 14px;
-    }
+.menu{
+  display:flex;
+  gap:20px;
+  list-style:none;
+}
 
-    .tagline {
-      font-size: clamp(16px, 2.5vw, 21px);
-      color: #b9c0bd;
-      max-width: 650px;
-      margin: auto;
-    }
+.menu a{
+  text-decoration:none;
+  color:#9da6a2;
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
 
-    .btn {
-      display: inline-block;
-      margin-top: 32px;
-      padding: 13px 25px;
-      border: 1px solid #b8d13f;
-      color: #b8d13f;
-      text-decoration: none;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
+.menu a:hover{
+  color:#b8d13f;
+}
 
-    main {
-      max-width: 1050px;
-      margin: auto;
-      padding: 70px 22px;
-    }
+.hero{
+  min-height:82vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:60px 20px;
+  background:
+    radial-gradient(
+      circle at 50% 25%,
+      #29302d 0,
+      #0d1011 58%
+    );
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns:
-        repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
-      margin-top: 35px;
-    }
+.eyebrow{
+  color:#b8d13f;
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:4px;
+  margin-bottom:18px;
+}
 
-    .card {
-      padding: 28px;
-      border: 1px solid #303635;
-      background: #171b1c;
-    }
+.logo-big{
+  font-size:clamp(65px,15vw,120px);
+  font-weight:900;
+  letter-spacing:15px;
+}
 
-    .card h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: #dfe3e1;
-    }
+.line{
+  width:90px;
+  height:4px;
+  background:#b8d13f;
+  margin:22px auto;
+}
 
-    .card p {
-      color: #9da5a1;
-      font-size: 15px;
-    }
+.hero h1{
+  font-size:clamp(30px,6vw,58px);
+  line-height:1.15;
+}
 
-    footer {
-      text-align: center;
-      padding: 28px;
-      color: #737b77;
-      border-top: 1px solid #292e2d;
-      font-size: 13px;
-    }
-  </style>
+.hero p{
+  max-width:650px;
+  margin:18px auto;
+  color:#aeb6b2;
+}
+
+.button{
+  display:inline-block;
+  margin-top:20px;
+  padding:13px 24px;
+  border:1px solid #b8d13f;
+  color:#b8d13f;
+  text-decoration:none;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+
+.button:hover{
+  background:#b8d13f;
+  color:#0d1011;
+}
+
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:70px 20px;
+}
+
+section{
+  scroll-margin-top:80px;
+  margin-bottom:90px;
+}
+
+.title{
+  margin-bottom:25px;
+}
+
+.title h2{
+  font-size:30px;
+}
+
+.title p{
+  color:#737d79;
+  font-size:13px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
+}
+
+.card{
+  background:#15191a;
+  border:1px solid #2b312f;
+  padding:25px;
+}
+
+.card h3{
+  margin-bottom:8px;
+}
+
+.muted{
+  color:#8f9894;
+  font-size:14px;
+}
+
+.signal{
+  position:relative;
+  overflow:hidden;
+}
+
+.signal:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:#b8d13f;
+}
+
+.signal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.pair{
+  font-size:23px;
+  font-weight:900;
+}
+
+.badge{
+  border:1px solid #b8d13f;
+  color:#b8d13f;
+  padding:4px 8px;
+  font-size:9px;
+  font-weight:bold;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  padding:9px 0;
+  border-bottom:1px solid #272c2b;
+  font-size:13px;
+}
+
+.row:last-child{
+  border-bottom:none;
+}
+
+.row span:first-child{
+  color:#747e7a;
+}
+
+.status{
+  margin-top:17px;
+  color:#b8d13f;
+  font-size:10px;
+  font-weight:bold;
+  letter-spacing:1.5px;
+}
+
+.notice{
+  margin-top:20px;
+  padding:15px;
+  border-left:3px solid #656d69;
+  background:#15191a;
+  color:#858e8a;
+  font-size:12px;
+}
+
+.about{
+  background:#15191a;
+  border:1px solid #2b312f;
+  padding:30px;
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  border-top:1px solid #292e2d;
+  color:#68716d;
+  font-size:12px;
+}
+
+@media(max-width:700px){
+
+  .nav{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .menu{
+    gap:13px;
+  }
+
+  .menu a{
+    font-size:9px;
+  }
+
+  .logo-big{
+    letter-spacing:9px;
+  }
+
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <div class="wrap">
+<nav>
+  <div class="nav">
 
-      <div class="mark">VIXO</div>
-
-      <div class="line"></div>
-
-      <h1>
-        Learn the Market. Read the Structure.
-      </h1>
-
-      <p class="tagline">
-        A learning platform dedicated to technical trading,
-        market analysis, and price action.
-      </p>
-
-      <a class="btn" href="#learn">
-        EXPLORE VIXO
-      </a>
-
+    <div class="logo">
+      VI<span>X</span>O
     </div>
-  </header>
+
+    <ul class="menu">
+      <li><a href="#home">HOME</a></li>
+      <li><a href="#signals">SIGNALS</a></li>
+      <li><a href="#market">MARKET</a></li>
+      <li><a href="#journal">JOURNAL</a></li>
+      <li><a href="#about">ABOUT</a></li>
+    </ul>
+
+  </div>
+</nav>
 
 
-  <main id="learn">
+<header class="hero" id="home">
 
-    <h1>VIXO Learning</h1>
+  <div>
 
-    <p class="tagline">
-      Tempat untuk mempelajari cara membaca pergerakan harga
-      secara terstruktur dan disiplin.
+    <div class="eyebrow">
+      VIXO MARKET BOARD
+    </div>
+
+    <div class="logo-big">
+      VIXO
+    </div>
+
+    <div class="line"></div>
+
+    <h1>
+      Read the Market.<br>
+      Respect the Structure.
+    </h1>
+
+    <p>
+      A clean dashboard for market analysis,
+      educational setups, and trading journal records.
     </p>
 
-    <div class="grid">
+    <a class="button" href="#signals">
+      VIEW SIGNAL BOARD
+    </a>
 
-      <section class="card">
-        <h2>Technical Analysis</h2>
-        <p>
-          Materi dasar hingga lanjutan untuk memahami
-          chart dan pergerakan harga.
-        </p>
-      </section>
+  </div>
 
-      <section class="card">
-        <h2>Market Structure</h2>
-        <p>
-          Mempelajari struktur pasar, perubahan arah,
-          dan konteks pergerakan harga.
-        </p>
-      </section>
+</header>
 
-      <section class="card">
-        <h2>Price Action</h2>
-        <p>
-          Belajar membaca respons harga dan area penting
-          tanpa bergantung pada tebakan.
-        </p>
-      </section>
+
+<main>
+
+<section id="signals">
+
+  <div class="title">
+    <h2>Signal Board</h2>
+    <p>Educational setup examples and market observations.</p>
+  </div>
+
+
+  <div class="grid">
+
+    <div class="card signal">
+
+      <div class="signal-head">
+
+        <div class="pair">
+          XAUUSD
+        </div>
+
+        <div class="badge">
+          EXAMPLE
+        </div>
+
+      </div>
+
+      <div class="row">
+        <span>Bias</span>
+        <strong>BULLISH</strong>
+      </div>
+
+      <div class="row">
+        <span>Timeframe</span>
+        <strong>M15 → M5</strong>
+      </div>
+
+      <div class="row">
+        <span>Area</span>
+        <strong>Demand / RBS</strong>
+      </div>
+
+      <div class="row">
+        <span>Confirmation</span>
+        <strong>Sweep + Break</strong>
+      </div>
+
+      <div class="status">
+        ● WAITING CONFIRMATION
+      </div>
 
     </div>
 
-  </main>
+
+    <div class="card signal">
+
+      <div class="signal-head">
+
+        <div class="pair">
+          EURUSD
+        </div>
+
+        <div class="badge">
+          EXAMPLE
+        </div>
+
+      </div>
+
+      <div class="row">
+        <span>Bias</span>
+        <strong>BEARISH</strong>
+      </div>
+
+      <div class="row">
+        <span>Timeframe</span>
+        <strong>M15 → M5</strong>
+      </div>
+
+      <div class="row">
+        <span>Area</span>
+        <strong>Supply / RBS</strong>
+      </div>
+
+      <div class="row">
+        <span>Confirmation</span>
+        <strong>Structure Break</strong>
+      </div>
+
+      <div class="status">
+        ● ANALYSIS ONLY
+      </div>
+
+    </div>
+
+  </div>
 
 
-  <footer>
-    © 2026 VIXO. Learning. Analysis. Discipline.
-  </footer>
+  <div class="notice">
+    VIXO menampilkan contoh analisis untuk pembelajaran
+    dan dokumentasi. Kondisi market dapat berubah.
+  </div>
+
+</section>
+
+
+
+<section id="market">
+
+  <div class="title">
+    <h2>Market</h2>
+    <p>Framework untuk membaca pergerakan harga.</p>
+  </div>
+
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Market Structure</h3>
+      <p class="muted">
+        Membaca struktur harga dan konteks pergerakan
+        sebelum mencari area setup.
+      </p>
+    </div>
+
+
+    <div class="card">
+      <h3>SNR / Supply & Demand</h3>
+      <p class="muted">
+        Mengidentifikasi area penting yang menjadi
+        perhatian dalam analisis.
+      </p>
+    </div>
+
+
+    <div class="card">
+      <h3>Confirmation</h3>
+      <p class="muted">
+        Area saja tidak otomatis menjadi setup.
+        Konfirmasi diperlukan sebelum sebuah ide dianggap valid.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<section id="journal">
+
+  <div class="title">
+    <h2>Trading Journal</h2>
+    <p>Dokumentasi proses analisis dan evaluasi.</p>
+  </div>
+
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Backtest</h3>
+      <p class="muted">
+        Catat setup, alasan entry, invalidation,
+        dan hasil backtest.
+      </p>
+    </div>
+
+
+    <div class="card">
+      <h3>Setup Review</h3>
+      <p class="muted">
+        Bandingkan rencana awal dengan apa yang
+        benar-benar terjadi di market.
+      </p>
+    </div>
+
+
+    <div class="card">
+      <h3>Discipline</h3>
+      <p class="muted">
+        Dokumentasikan apakah keputusan mengikuti
+        trading plan atau tidak.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<section id="about">
+
+  <div class="about">
+
+    <h2>
+      About VIXO
+    </h2>
+
+    <p class="muted" style="margin-top:10px">
+      VIXO adalah konsep platform belajar yang berfokus
+      pada technical analysis, market structure,
+      price action, dan dokumentasi proses analisis.
+    </p>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+  © 2026 VIXO. Learning. Analysis. Discipline.
+</footer>
 
 </body>
-  </html>
+</html>
