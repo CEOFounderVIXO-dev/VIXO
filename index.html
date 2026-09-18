@@ -1750,65 +1750,103 @@ function setResult(
 
 }
 
+analyzeChartButton.addEventListener("click", async ()=>{
+  if(!selectedChartDataUrl)return;
 
-analyzeChart.addEventListener(
-  "click",
-  async function(){
+  analyzeChartButton.disabled=true;
+  analyzerMessage.textContent="Menganalisis screenshot dengan VIXO SS Analyzer...";
 
-    if(!chartImageData){
+  setSSResult({
+    bias:"ANALYZING",
+    action:"WAIT",
+    area:"—",
+    confirmation:"—",
+    entry:"—",
+    sl:"—",
+    tp:"—",
+    status:"WAIT",
+    reason:"AI sedang membaca M15, M5, dan M1 sesuai rule VIXO."
+  });
 
-      analyzerMessage.textContent =
-        "Upload chart terlebih dahulu.";
+  try{
+    const {
+      data:{session},
+      error:sessionError
+    } = await client.auth.getSession();
 
-      return;
-
+    if(sessionError || !session){
+      throw new Error("Sesi login VIXO tidak ditemukan.");
     }
 
-
-    analyzeChart.disabled =
-      true;
-
-    analyzerMessage.textContent =
-      "Menyiapkan analisis...";
-
-
-    /*
-      Backend AI VIXO belum terhubung.
-      Analyzer frontend ini hanya menyiapkan
-      screenshot dan tampilan hasil.
-    */
-
-
-    setTimeout(
-      function(){
-
-        setResult(
-          "WAIT",
-          "WAIT",
-          "Belum tersedia",
-          "Belum tersedia",
-          "—",
-          "—",
-          "—",
-          document.getElementById(
-            "chart-timeframe"
-          ).value,
-          "Backend AI Vision VIXO belum terhubung. Screenshot sudah diterima, tetapi belum ada engine AI yang membaca chart."
-        );
-
-
-        analyzerMessage.textContent =
-          "Screenshot diterima. Backend AI belum terhubung.";
-
-        analyzeChart.disabled =
-          false;
-
-      },
-      600
+    const response = await fetch(
+      SUPABASE_URL + "/functions/v1/vixo-ss-analyzer",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":"Bearer " + session.access_token,
+          "apikey":SUPABASE_KEY
+        },
+        body:JSON.stringify({
+          image:selectedChartDataUrl,
+          symbol:(chartSymbol.value || "XAUUSD").trim().toUpperCase(),
+          timeframe:"M15+M5+M1"
+        })
+      }
     );
 
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || "Analyzer gagal memproses screenshot.");
+    }
+
+    setSSResult({
+      bias:data.m15_bias || "—",
+      action:data.action || "WAIT",
+      area:data.poi || "—",
+      confirmation:
+        (data.confirmation_candles ?? 0) + "/3" +
+        (data.m1_confirmation && data.m1_confirmation !== "UNKNOWN"
+          ? " " + data.m1_confirmation
+          : ""),
+      entry:data.entry ?? "—",
+      sl:data.sl ?? "—",
+      tp:data.tp ?? "—",
+      status:data.status || "WAIT",
+      reason:data.reason || "—"
+    });
+
+    resultTimeframe.textContent="M15 + M5 + M1";
+
+    analyzerMessage.textContent =
+      data.action === "BUY"
+        ? "VIXO mendeteksi setup BUY berdasarkan rule yang terpenuhi."
+        : data.action === "SELL"
+        ? "VIXO mendeteksi setup SELL berdasarkan rule yang terpenuhi."
+        : "VIXO belum mendapatkan setup lengkap. WAITING!!.";
+
+  }catch(error){
+
+    setSSResult({
+      bias:"—",
+      action:"WAIT",
+      area:"—",
+      confirmation:"—",
+      entry:"—",
+      sl:"—",
+      tp:"—",
+      status:"WAIT",
+      reason:error.message || "Terjadi kesalahan saat analisis."
+    });
+
+    analyzerMessage.textContent =
+      "Analisis gagal: " + (error.message || "unknown error");
+
+  }finally{
+    analyzeChartButton.disabled=false;
   }
-);
+});
 
 
 </script>
