@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>VIXO</title>
-  <meta name="description" content="VIXO — Market Analysis & Learning">
+<title>VIXO — Bot Control Panel</title>
+<meta name="description" content="VIXO — Market Analysis & Demo Bot Control Panel">
 
 <style>
 *{
@@ -20,11 +20,7 @@ html{
 
 body{
   font-family:Arial,Helvetica,sans-serif;
-  background-image: linear-gradient(rgba(8,10,14,.78), rgba(8,10,14,.92)), url("VIXO_website_background.jpg");
-background-size: cover;
-background-position: center;
-background-attachment: fixed;
-background-repeat: no-repeat;
+  background:#0d1011;
   color:#edf0ee;
   line-height:1.6;
 }
@@ -44,11 +40,6 @@ nav{
   display:flex;
   align-items:center;
   justify-content:space-between;
-}
-
-.logo{
-  display:flex;
-  align-items:center;
 }
 
 .logo img{
@@ -77,7 +68,7 @@ nav{
 }
 
 .hero{
-  min-height:82vh;
+  min-height:58vh;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -147,7 +138,7 @@ main{
 
 section{
   scroll-margin-top:80px;
-  margin-bottom:90px;
+  margin-bottom:70px;
 }
 
 .title{
@@ -163,41 +154,17 @@ section{
   font-size:13px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:
-    repeat(auto-fit,minmax(250px,1fr));
-  gap:18px;
-}
-
 .card{
   background:#15191a;
   border:1px solid #2b312f;
   padding:25px;
 }
 
-.card h3{
-  margin-bottom:8px;
-}
-
-.muted{
-  color:#8f9894;
-  font-size:14px;
-}
-
-.signal{
-  position:relative;
-  overflow:hidden;
-}
-
-.signal:before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  bottom:0;
-  width:3px;
-  background:#b8d13f;
+.bot-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(300px,1fr));
+  gap:18px;
 }
 
 .signal-head{
@@ -212,6 +179,11 @@ section{
   font-weight:900;
 }
 
+.muted{
+  color:#8f9894;
+  font-size:12px;
+}
+
 .badge{
   border:1px solid #b8d13f;
   color:#b8d13f;
@@ -220,9 +192,105 @@ section{
   font-weight:bold;
 }
 
+.control-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 0 18px;
+  border-bottom:1px solid #272c2b;
+  margin-bottom:18px;
+}
+
+.control-row label,
+.control-field label{
+  display:block;
+  color:#747e7a;
+  font-size:10px;
+  font-weight:bold;
+  letter-spacing:1.2px;
+  margin-bottom:7px;
+}
+
+.toggle{
+  min-width:72px;
+  padding:8px 15px;
+  border-radius:20px;
+  border:1px solid #4a514e;
+  background:#202423;
+  color:#9aa39f;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.toggle.on{
+  border-color:#b8d13f;
+  background:#b8d13f;
+  color:#10130f;
+}
+
+.toggle.off{
+  border-color:#4a514e;
+  background:#202423;
+  color:#9aa39f;
+}
+
+.control-field{
+  margin-bottom:15px;
+}
+
+.control-field input{
+  width:100%;
+  padding:11px 12px;
+  background:#0d1011;
+  color:#edf0ee;
+  border:1px solid #303634;
+  border-radius:7px;
+  outline:none;
+}
+
+.control-field input:focus{
+  border-color:#b8d13f;
+}
+
+.control-field input:disabled{
+  opacity:.55;
+}
+
+.control-two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.save-bot{
+  width:100%;
+  margin-top:5px;
+  padding:12px;
+  border:1px solid #b8d13f;
+  border-radius:7px;
+  background:#b8d13f;
+  color:#10130f;
+  font-weight:bold;
+  letter-spacing:1px;
+  cursor:pointer;
+}
+
+.save-bot:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.bot-message{
+  min-height:20px;
+  margin-top:12px;
+  color:#8f9894;
+  font-size:12px;
+}
+
 .row{
   display:flex;
   justify-content:space-between;
+  gap:15px;
   padding:9px 0;
   border-bottom:1px solid #272c2b;
   font-size:13px;
@@ -242,6 +310,13 @@ section{
   font-size:10px;
   font-weight:bold;
   letter-spacing:1.5px;
+}
+
+.posted-time{
+  display:block;
+  margin-top:14px;
+  font-size:11px;
+  color:#737d79;
 }
 
 .notice{
@@ -267,6 +342,94 @@ footer{
   font-size:12px;
 }
 
+#vixo-login{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:#0d1011;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.login-box{
+  width:100%;
+  max-width:390px;
+  padding:35px 25px;
+  background:#131719;
+  border:1px solid #292f2d;
+  border-radius:14px;
+  text-align:center;
+}
+
+.login-logo{
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:5px;
+  color:#f0f0ee;
+  margin-bottom:18px;
+}
+
+.login-logo span{
+  color:#b8d13f;
+}
+
+.login-title{
+  color:#f0f0ee;
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:2px;
+}
+
+.login-subtitle{
+  color:#8f9794;
+  font-size:13px;
+  margin:10px 0 25px;
+}
+
+#vixo-email,
+#vixo-password{
+  width:100%;
+  padding:13px;
+  margin-bottom:12px;
+  background:#0d1011;
+  color:#fff;
+  border:1px solid #303634;
+  border-radius:8px;
+  outline:none;
+}
+
+#vixo-login-btn,
+.signup-btn{
+  width:100%;
+  padding:13px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+#vixo-login-btn{
+  border:none;
+  background:#b8d13f;
+  color:#10130f;
+}
+
+.signup-btn{
+  margin-top:10px;
+  background:transparent;
+  color:#b8d13f;
+  border:1px solid #39402c;
+}
+
+#vixo-message{
+  min-height:20px;
+  margin-top:15px;
+  color:#9da5a2;
+  font-size:12px;
+}
+
 @media(max-width:700px){
 
   .nav{
@@ -286,6 +449,10 @@ footer{
     letter-spacing:9px;
   }
 
+  .control-two{
+    grid-template-columns:1fr;
+    gap:0;
+  }
 }
 </style>
 </head>
@@ -296,12 +463,15 @@ footer{
   <div class="nav">
 
     <div class="logo">
-  <img src="IMG_20260918_064032.jpg" alt="VIXO">
+      <img
+        src="IMG_20260918_064032.jpg"
+        alt="VIXO"
+      >
     </div>
 
     <ul class="menu">
       <li><a href="#home">HOME</a></li>
-      <li><a href="#signals">SIGNALS</a></li>
+      <li><a href="#signals">BOT</a></li>
       <li><a href="#market">MARKET</a></li>
       <li><a href="#journal">JOURNAL</a></li>
       <li><a href="#about">ABOUT</a></li>
@@ -310,13 +480,12 @@ footer{
   </div>
 </nav>
 
-
 <header class="hero" id="home">
 
   <div>
 
     <div class="eyebrow">
-      VIXO MARKET BOARD
+      VIXO BOT CONTROL
     </div>
 
     <div class="logo-big">
@@ -326,258 +495,381 @@ footer{
     <div class="line"></div>
 
     <h1>
-      Read the Market.<br>
+      Control the Bot.<br>
       Respect the Structure.
     </h1>
 
     <p>
-      A clean dashboard for market analysis,
-      educational setups, and trading journal records.
+      Panel kontrol VIXO untuk mengirim parameter
+      ke EA MT5 dan memantau status analyzer.
     </p>
 
     <a class="button" href="#signals">
-      VIEW SIGNAL BOARD
+      OPEN BOT PANEL
     </a>
 
   </div>
 
 </header>
 
-
 <main>
 
 <section id="signals">
 
   <div class="title">
-    <h2>Signal Board</h2>
-    <button id="add-analysis-btn" style="display:none;">
-  + ADD ANALYSIS
-</button>
 
-<div id="analysis-form" style="display:none;">
+    <h2>
+      Bot Control Panel
+    </h2>
 
-  <input id="analysis-pair"
-    type="text"
-    placeholder="Pair — contoh: XAUUSD">
+    <p>
+      Atur parameter VIXO EA dan pantau koneksi analyzer.
+    </p>
 
-  <select id="analysis-bias">
-    <option value="">Bias</option>
-    <option value="BULLISH">BULLISH</option>
-    <option value="BEARISH">BEARISH</option>
-    <option value="NEUTRAL">NEUTRAL</option>
-  </select>
-
-  <input id="analysis-timeframe"
-    type="text"
-    placeholder="Timeframe — contoh: M15 → M5">
-
-  <input id="analysis-area"
-    type="text"
-    placeholder="Area — contoh: Demand / RBS">
-
-  <input id="analysis-confirmation"
-    type="text"
-    placeholder="Confirmation">
-
-  <select id="analysis-status">
-    <option value="">Status</option>
-    <option value="WAITING CONFIRMATION">WAITING CONFIRMATION</option>
-    <option value="ANALYSIS ONLY">ANALYSIS ONLY</option>
-    <option value="COMPLETED">COMPLETED</option>
-  </select>
-
-  <textarea id="analysis-notes"
-    placeholder="Tulis catatan analisis..."></textarea>
-
-  <button id="publish-analysis-btn">
-    PUBLISH ANALYSIS
-  </button>
-
-  <button id="cancel-analysis-btn">
-    CANCEL
-  </button>
-
-</div>
-    <p>Educational setup examples and market observations.</p>
   </div>
 
+  <div class="bot-grid">
 
-  <div class="grid">
-
-    <div class="card signal">
+    <div class="card">
 
       <div class="signal-head">
 
-        <div class="pair">
-          XAUUSD
+        <div>
+
+          <div class="pair">
+            VIXO EA
+          </div>
+
+          <div class="muted">
+            REMOTE CONTROL
+          </div>
+
         </div>
 
-        <div class="badge">
-          EXAMPLE
+        <div id="owner-badge" class="badge">
+          CHECKING
         </div>
 
       </div>
 
-      <div class="row">
-        <span>Bias</span>
-        <strong>BULLISH</strong>
+      <div class="control-row">
+
+        <label>
+          AUTO ANALYZER
+        </label>
+
+        <button
+          id="bot-enabled"
+          class="toggle off"
+          type="button"
+        >
+          OFF
+        </button>
+
       </div>
 
-      <div class="row">
-        <span>Timeframe</span>
-        <strong>M15 → M5</strong>
+      <div class="control-field">
+
+        <label for="bot-symbol">
+          SYMBOL
+        </label>
+
+        <input
+          id="bot-symbol"
+          type="text"
+          value="XAUUSD"
+          placeholder="XAUUSD"
+        >
+
       </div>
 
-      <div class="row">
-        <span>Area</span>
-        <strong>Demand / RBS</strong>
+      <div class="control-field">
+
+        <label for="bot-lot">
+          LOT
+        </label>
+
+        <input
+          id="bot-lot"
+          type="number"
+          min="0.01"
+          step="0.01"
+          value="0.01"
+        >
+
       </div>
 
-      <div class="row">
-        <span>Confirmation</span>
-        <strong>Sweep + Break</strong>
+      <div class="control-field">
+
+        <label for="bot-maxpos">
+          MAX POSITIONS
+        </label>
+
+        <input
+          id="bot-maxpos"
+          type="number"
+          min="1"
+          step="1"
+          value="1"
+        >
+
       </div>
 
-      <div class="status">
-        ● WAITING CONFIRMATION
+      <div class="control-field">
+
+        <label for="bot-rr">
+          RISK : REWARD
+        </label>
+
+        <input
+          id="bot-rr"
+          type="number"
+          min="0.1"
+          step="0.1"
+          value="2"
+        >
+
       </div>
+
+      <div class="control-two">
+
+        <div class="control-field">
+
+          <label for="bot-session-start">
+            SESSION START
+          </label>
+
+          <input
+            id="bot-session-start"
+            type="time"
+            value="00:00"
+          >
+
+        </div>
+
+        <div class="control-field">
+
+          <label for="bot-session-end">
+            SESSION END
+          </label>
+
+          <input
+            id="bot-session-end"
+            type="time"
+            value="23:59"
+          >
+
+        </div>
+
+      </div>
+
+      <button
+        id="save-bot-settings"
+        class="save-bot"
+        type="button"
+      >
+        SAVE SETTINGS
+      </button>
+
+      <div
+        id="bot-message"
+        class="bot-message"
+      ></div>
 
     </div>
 
 
-    <div class="card signal">
+    <div class="card">
 
       <div class="signal-head">
 
-        <div class="pair">
-          EURUSD
+        <div>
+
+          <div class="pair">
+            EA STATUS
+          </div>
+
+          <div class="muted">
+            MT5 CONNECTION
+          </div>
+
         </div>
 
-        <div class="badge">
-          EXAMPLE
+        <div
+          id="ea-status-badge"
+          class="badge"
+        >
+          OFFLINE
         </div>
 
       </div>
 
       <div class="row">
-        <span>Bias</span>
-        <strong>BEARISH</strong>
+        <span>Account</span>
+        <strong id="ea-account">—</strong>
       </div>
 
       <div class="row">
-        <span>Timeframe</span>
-        <strong>M15 → M5</strong>
+        <span>Symbol</span>
+        <strong id="ea-symbol">—</strong>
       </div>
 
       <div class="row">
-        <span>Area</span>
-        <strong>Supply / RBS</strong>
+        <span>Last Signal</span>
+        <strong id="ea-signal">—</strong>
       </div>
 
       <div class="row">
-        <span>Confirmation</span>
-        <strong>Structure Break</strong>
+        <span>Last Action</span>
+        <strong id="ea-action">—</strong>
       </div>
 
-      <div class="status">
-        ● ANALYSIS AND SIGNAL FREE
+      <div
+        class="status"
+        id="ea-message"
+      >
+        ● Menunggu koneksi EA
+      </div>
+
+      <div
+        class="posted-time"
+        id="ea-updated"
+      >
+        Last update: —
       </div>
 
     </div>
 
   </div>
-
 
   <div class="notice">
-    VIXO menampilkan contoh analisis untuk pembelajaran
-    dan signal, Kondisi market dapat berubah.
+
+    VIXO hanya mengirim parameter kontrol ke EA.
+    Analisis market dilakukan oleh EA di MT5.
+    Untuk tahap pengujian, gunakan akun DEMO.
+
   </div>
 
 </section>
-
 
 
 <section id="market">
 
   <div class="title">
-    <h2>Market</h2>
-    <p>Framework untuk membaca pergerakan harga.</p>
+
+    <h2>
+      Market Framework
+    </h2>
+
+    <p>
+      Kerangka analisis yang menjadi konteks EA.
+    </p>
+
   </div>
 
-
-  <div class="grid">
+  <div class="bot-grid">
 
     <div class="card">
-      <h3>Market Structure</h3>
+
+      <h3>
+        M15 Structure
+      </h3>
+
       <p class="muted">
-        Membaca struktur harga dan konteks pergerakan
-        sebelum mencari area setup.
+        EA membaca struktur M15 sebagai konteks
+        utama sebelum mencari setup.
       </p>
+
     </div>
 
-
     <div class="card">
-      <h3>SNR / Supply & Demand</h3>
+
+      <h3>
+        M5 Confirmation
+      </h3>
+
       <p class="muted">
-        Mengidentifikasi area penting yang menjadi
-        perhatian dalam analisis.
+        EA mencari area dan konfirmasi pada M5
+        sesuai aturan yang ditentukan.
       </p>
+
     </div>
 
-
     <div class="card">
-      <h3>Confirmation</h3>
+
+      <h3>
+        Confirmation
+      </h3>
+
       <p class="muted">
-        Area saja tidak otomatis menjadi setup.
-        Konfirmasi diperlukan sebelum sebuah ide dianggap valid.
+        Area saja tidak otomatis menjadi entry.
+        Konfirmasi tetap diperlukan.
       </p>
+
     </div>
 
   </div>
 
 </section>
-
 
 
 <section id="journal">
 
   <div class="title">
-    <h2>Trading Journal</h2>
-    <p>proses analisis dan evaluasi.</p>
+
+    <h2>
+      Trading Journal
+    </h2>
+
+    <p>
+      Dokumentasi proses analisis dan evaluasi.
+    </p>
+
   </div>
 
-
-  <div class="grid">
+  <div class="bot-grid">
 
     <div class="card">
-      <h3>Backtest</h3>
+
+      <h3>
+        Backtest
+      </h3>
+
       <p class="muted">
-        Catat setup, alasan entry, invalidation,
-        dan hasil trade.
+        Uji aturan EA sebelum mempertimbangkan
+        penggunaan lebih lanjut.
       </p>
+
     </div>
 
-
     <div class="card">
-      <h3>Setup Review</h3>
+
+      <h3>
+        Setup Review
+      </h3>
+
       <p class="muted">
-        Bandingkan rencana awal dengan apa yang
-        benar-benar terjadi di market.
+        Bandingkan aturan dengan hasil yang
+        benar-benar terjadi.
       </p>
+
     </div>
 
-
     <div class="card">
-      <h3>Discipline</h3>
+
+      <h3>
+        Discipline
+      </h3>
+
       <p class="muted">
         Ragumu Rugimu
       </p>
+
     </div>
 
   </div>
 
 </section>
-
 
 
 <section id="about">
@@ -588,10 +880,15 @@ footer{
       About VIXO
     </h2>
 
-    <p class="muted" style="margin-top:10px">
-      VIXO adalah konsep platform belajar signal yang berfokus
-      pada technical analysis, market structure,
-      price action, dan dokumentasi proses analisis.
+    <p
+      class="muted"
+      style="margin-top:10px"
+    >
+      VIXO adalah dashboard untuk mengontrol
+      parameter EA dan memantau proses analyzer.
+      EA MT5 tetap menjadi komponen yang membaca
+      market dan menjalankan aturan yang telah
+      ditentukan.
     </p>
 
   </div>
@@ -600,615 +897,527 @@ footer{
 
 </main>
 
-
 <footer>
   © 2026 VIXO. Learning. Analysis. Discipline.
 </footer>
-  
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  const SUPABASE_URL = "https://coppwuqtxplzdcqzeoxj.supabase.co";
 
-  // MASUKKAN PUBLISHABLE KEY MILIKMU DI SINI
-  const SUPABASE_KEY = "sb_publishable_5qUeiFWGWkcfpiBKyCXp8g_IUPzMOmb";
+const SUPABASE_URL =
+  "https://coppwuqtxplzdcqzeoxj.supabase.co";
 
-  const { createClient } = supabase;
-  const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_KEY =
+  "sb_publishable_5qUeiFWGWkcfpiBKyCXp8g_IUPzMOmb";
 
-  // Login screen
-  const loginScreen = document.createElement("div");
+const { createClient } = supabase;
 
-  loginScreen.innerHTML = `
-    <div id="vixo-login">
-      <div class="login-box">
-        <div class="login-logo">VIX<span>O</span></div>
-        <div class="login-title">VIXO MARKET BOARD</div>
-        <div class="login-subtitle">
-          Login untuk mengakses VIXO.
-        </div>
+const client =
+  createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
-        <input id="vixo-email"
-          type="email"
-          placeholder="Email"
-          autocomplete="email">
+const OWNER_EMAIL =
+  "tradermuda689@gmail.com";
 
-        <input id="vixo-password"
-          type="password"
-          placeholder="Password"
-          autocomplete="current-password">
 
-        <button id="vixo-login-btn">LOGIN</button>
+const loginScreen =
+  document.createElement("div");
 
-        <button id="vixo-signup-btn" class="signup-btn">
-          CREATE ACCOUNT
-        </button>
+loginScreen.innerHTML = `
 
-        <p id="vixo-message"></p>
-      </div>
-    </div>
-  `;
+<div id="vixo-login">
 
-  document.body.prepend(loginScreen);
+  <div class="login-box">
 
-  const style = document.createElement("style");
-
-  style.textContent = `
-    #vixo-login {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      background: #0d1011;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .login-box {
-      width: 100%;
-      max-width: 390px;
-      padding: 35px 25px;
-      background: #131719;
-      border: 1px solid #292f2d;
-      border-radius: 14px;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-    }
-
-    .login-logo {
-      font-size: 34px;
-      font-weight: 900;
-      letter-spacing: 5px;
-      color: #f0f0ee;
-      margin-bottom: 18px;
-    }
-
-    .login-logo span {
-      color: #b8d13f;
-    }
-
-    .login-title {
-      color: #f0f0ee;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 2px;
-    }
-
-    .login-subtitle {
-      color: #8f9794;
-      font-size: 13px;
-      margin: 10px 0 25px;
-    }
-
-    #vixo-email,
-    #vixo-password {
-      width: 100%;
-      padding: 13px;
-      margin-bottom: 12px;
-      background: #0d1011;
-      color: #fff;
-      border: 1px solid #303634;
-      border-radius: 8px;
-      outline: none;
-      box-sizing: border-box;
-    }
-
-    #vixo-email:focus,
-    #vixo-password:focus {
-      border-color: #b8d13f;
-    }
-
-    #vixo-login-btn,
-    .signup-btn {
-      width: 100%;
-      padding: 13px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-
-    #vixo-login-btn {
-      border: none;
-      background: #b8d13f;
-      color: #10130f;
-    }
-
-    .signup-btn {
-      margin-top: 10px;
-      background: transparent;
-      color: #b8d13f;
-      border: 1px solid #39402c;
-    }
-
-    #vixo-message {
-      min-height: 20px;
-      margin-top: 15px;
-      color: #9da5a2;
-      font-size: 12px;
-    }
-  `;
-
-  document.head.appendChild(style);
-
-  const screen = document.getElementById("vixo-login");
-  const email = document.getElementById("vixo-email");
-  const password = document.getElementById("vixo-password");
-  const message = document.getElementById("vixo-message");
-
-  async function checkUser() {
-    const { data } = await client.auth.getSession();
-
-    if (data.session) {
-      screen.style.display = "none";
-
-      setupPushNotifications(data.session.user);
-    } else {
-      screen.style.display = "flex";
-    }
-  }
-
-  document.getElementById("vixo-login-btn").onclick = async () => {
-    message.textContent = "Logging in...";
-
-    const { error } = await client.auth.signInWithPassword({
-      email: email.value,
-      password: password.value
-    });
-
-    if (error) {
-      message.textContent = error.message;
-      return;
-    }
-
-    message.textContent = "Login berhasil.";
-    screen.style.display = "none";
-    await setupPushNotifications(data.user);
-  };
-
-  document.getElementById("vixo-signup-btn").onclick = async () => {
-    message.textContent = "Creating account...";
-
-    const { error } = await client.auth.signUp({
-      email: email.value,
-      password: password.value
-    });
-
-    if (error) {
-      message.textContent = error.message;
-      return;
-    }
-
-    message.textContent =
-      "Account dibuat. Cek email kamu untuk konfirmasi.";
-  };
-
-  client.auth.onAuthStateChange((event, session) => {
-    if (session) {
-      screen.style.display = "none";
-    } else {
-      screen.style.display = "flex";
-    }
-  });
-
-  const OWNER_EMAIL = "tradermuda689@gmail.com";
-
-const addAnalysisBtn = document.getElementById("add-analysis-btn");
-const analysisForm = document.getElementById("analysis-form");
-const cancelAnalysisBtn = document.getElementById("cancel-analysis-btn");
-
-async function checkOwner() {
-  const { data: { user } } = await client.auth.getUser();
-
-  if (user && user.email === OWNER_EMAIL) {
-    addAnalysisBtn.style.display = "inline-block";
-  }
-}
-
-addAnalysisBtn.onclick = () => {
-  analysisForm.style.display = "block";
-};
-
-cancelAnalysisBtn.onclick = () => {
-  analysisForm.style.display = "none";
-};
-
-checkOwner();
-
-  async function sendBrowserNotification(title, text) {
-  if (!("Notification" in window)) return;
-
-  if (Notification.permission === "default") {
-    await Notification.requestPermission();
-  }
-
-  if (Notification.permission === "granted") {
-    new Notification(title, {
-      body: text,
-      icon: "IMG_20260918_064032.jpg"
-    });
-  }
-  }
-  
-document.getElementById("publish-analysis-btn").onclick = async () => {
-
-  if ("Notification" in window && Notification.permission === "default") {
-  await Notification.requestPermission();
-  }
-  
-  const pair = document.getElementById("analysis-pair").value.trim();
-  const bias = document.getElementById("analysis-bias").value;
-  const timeframe = document.getElementById("analysis-timeframe").value.trim();
-  const area = document.getElementById("analysis-area").value.trim();
-  const confirmation = document.getElementById("analysis-confirmation").value.trim();
-  const status = document.getElementById("analysis-status").value;
-  const notes = document.getElementById("analysis-notes").value.trim();
-
-  if (!pair || !bias || !timeframe || !area || !confirmation || !status) {
-    alert("Lengkapi data analysis terlebih dahulu.");
-    return;
-  }
-
-  const { data: { user } } = await client.auth.getUser();
-
-  if (!user) {
-    alert("Kamu harus login terlebih dahulu.");
-    return;
-  }
-
-  const { error } = await client
-    .from("analyses")
-    .insert({
-      pair: pair,
-      bias: bias,
-      timeframe: timeframe,
-      area: area,
-      confirmation: confirmation,
-      status: status,
-      notes: notes || null,
-      created_by: user.id
-    });
-
-  if (error) {
-    console.error("SUPABASE ERROR:", error);
-    alert("Gagal menyimpan analysis: " + error.message);
-    return;
-  }
-
-  const postedAt = new Date().toLocaleString("id-ID", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-
-  const grid = document.querySelector("#signals .grid");
-
-  const card = document.createElement("div");
-  card.className = "card signal";
-
-  card.innerHTML = `
-    <div class="signal-head">
-      <div class="pair">${pair}</div>
-      <div class="badge">ANALYSIS</div>
+    <div class="login-logo">
+      VIX<span>O</span>
     </div>
 
-    <div class="row">
-      <span>Bias</span>
-      <strong>${bias}</strong>
+    <div class="login-title">
+      VIXO MARKET BOARD
     </div>
 
-    <div class="row">
-      <span>Timeframe</span>
-      <strong>${timeframe}</strong>
+    <div class="login-subtitle">
+      Login untuk mengakses VIXO.
     </div>
 
-    <div class="row">
-      <span>Area</span>
-      <strong>${area}</strong>
-    </div>
+    <input
+      id="vixo-email"
+      type="email"
+      placeholder="Email"
+      autocomplete="email"
+    >
 
-    <div class="row">
-      <span>Confirmation</span>
-      <strong>${confirmation}</strong>
-    </div>
+    <input
+      id="vixo-password"
+      type="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
 
-    ${
-      notes
-        ? `
-          <div class="row">
-            <span>Notes</span>
-            <strong>${notes}</strong>
-          </div>
-        `
-        : ""
-    }
+    <button id="vixo-login-btn">
+      LOGIN
+    </button>
 
-    <div class="status">
-      • ${status}
-    </div>
-    
-<div class="posted-time" style="display:block; margin-top:10px; font-size:12px; color:#9aa0a6;">
-  Posted: ${postedAt}
-</div>
-  `;
+    <button
+      id="vixo-signup-btn"
+      class="signup-btn"
+    >
+      CREATE ACCOUNT
+    </button>
 
-  grid.prepend(card);
-showNotification(
-  "NEW ANALYSIS",
-  `${pair} baru dipublish.`
-);
-  sendBrowserNotification(
-  "VIXO MARKET BOARD",
-  `${pair} baru dipublish.`
-);
-  document.getElementById("analysis-form").style.display = "none";
+    <p id="vixo-message"></p>
 
-  document.getElementById("analysis-pair").value = "";
-  document.getElementById("analysis-bias").value = "";
-  document.getElementById("analysis-timeframe").value = "";
-  document.getElementById("analysis-area").value = "";
-  document.getElementById("analysis-confirmation").value = "";
-  document.getElementById("analysis-status").value = "";
-  document.getElementById("analysis-notes").value = "";
-
-  alert("Analysis berhasil dipublish.");
-};
-
-
-/* ===============================
-   REALTIME NOTIFICATION
-   =============================== */
-
-const notificationStyle = document.createElement("style");
-
-notificationStyle.textContent = `
-  #vixo-notification {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 99999;
-    width: min(340px, calc(100vw - 40px));
-    padding: 15px 18px;
-    background: #15191a;
-    border: 1px solid #b8d13f;
-    border-left: 4px solid #b8d13f;
-    color: #edf0ee;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.45);
-    opacity: 0;
-    transform: translateY(100px);
-    transition: .3s ease;
-  }
-
-  #vixo-notification.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  #vixo-notification-title {
-    color: #b8d13f;
-    font-weight: bold;
-    font-size: 13px;
-    margin-bottom: 5px;
-  }
-
-  #vixo-notification-text {
-    font-size: 14px;
-    line-height: 1.5;
-  }
-`;
-
-document.head.appendChild(notificationStyle);
-
-
-const notification = document.createElement("div");
-
-notification.id = "vixo-notification";
-
-notification.innerHTML = `
-  <div id="vixo-notification-title">
-    VIXO MARKET BOARD
   </div>
 
-  <div id="vixo-notification-text"></div>
+</div>
+
 `;
 
-document.body.appendChild(notification);
+document.body.prepend(
+  loginScreen
+);
 
 
-let notificationTimer;
-
-function showNotification(title, text) {
-
-  document.getElementById("vixo-notification-title").textContent = title;
-
-  document.getElementById("vixo-notification-text").textContent = text;
-
-  notification.classList.add("show");
-
-  clearTimeout(notificationTimer);
-
-  notificationTimer = setTimeout(() => {
-    notification.classList.remove("show");
-  }, 5000);
-}
-
-
-/* ===============================
-   REALTIME LISTENER
-   =============================== */
-
-client
-  .channel("vixo-analysis-notifications")
-
-  .on(
-    "postgres_changes",
-    {
-      event: "INSERT",
-      schema: "public",
-      table: "analyses"
-    },
-    (payload) => {
-
-      showNotification(
-        "NEW ANALYSIS",
-        `${payload.new.pair || "Signal"} baru dipublish.`
-      );
-
-    }
-  )
-
-  .on(
-    "postgres_changes",
-    {
-      event: "UPDATE",
-      schema: "public",
-      table: "analyses"
-    },
-    (payload) => {
-
-      showNotification(
-        "ANALYSIS UPDATED",
-        `${payload.new.pair || "Signal"} telah diperbarui.`
-      );
-
-    }
-  )
-
-  .on(
-    "postgres_changes",
-    {
-      event: "DELETE",
-      schema: "public",
-      table: "analyses"
-    },
-    (payload) => {
-
-      showNotification(
-        "ANALYSIS REMOVED",
-        "Signal telah dihapus."
-      );
-
-    }
-  )
-
-  .subscribe();
-  // ===============================
-// VIXO PUSH NOTIFICATION
-// ===============================
-
-const VAPID_PUBLIC_KEY =
-  "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEe5OUBOiuaZRWbPYyMN6fGotBNykagDpklYKqvh+KxKG3sRCiBVY/Y8K8xEv32J/jzOfT3FwhMgCFs0Kktq7Dng==";
-
-function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
-
-  const rawData = atob(base64);
-
-  return Uint8Array.from(
-    [...rawData].map(char => char.charCodeAt(0))
+const screen =
+  document.getElementById(
+    "vixo-login"
   );
+
+const email =
+  document.getElementById(
+    "vixo-email"
+  );
+
+const password =
+  document.getElementById(
+    "vixo-password"
+  );
+
+const loginMessage =
+  document.getElementById(
+    "vixo-message"
+  );
+
+
+const enabledButton =
+  document.getElementById(
+    "bot-enabled"
+  );
+
+const symbolInput =
+  document.getElementById(
+    "bot-symbol"
+  );
+
+const lotInput =
+  document.getElementById(
+    "bot-lot"
+  );
+
+const maxPosInput =
+  document.getElementById(
+    "bot-maxpos"
+  );
+
+const rrInput =
+  document.getElementById(
+    "bot-rr"
+  );
+
+const sessionStartInput =
+  document.getElementById(
+    "bot-session-start"
+  );
+
+const sessionEndInput =
+  document.getElementById(
+    "bot-session-end"
+  );
+
+const saveButton =
+  document.getElementById(
+    "save-bot-settings"
+  );
+
+const botMessage =
+  document.getElementById(
+    "bot-message"
+  );
+
+const ownerBadge =
+  document.getElementById(
+    "owner-badge"
+  );
+
+
+const eaStatusBadge =
+  document.getElementById(
+    "ea-status-badge"
+  );
+
+const eaAccount =
+  document.getElementById(
+    "ea-account"
+  );
+
+const eaSymbol =
+  document.getElementById(
+    "ea-symbol"
+  );
+
+const eaSignal =
+  document.getElementById(
+    "ea-signal"
+  );
+
+const eaAction =
+  document.getElementById(
+    "ea-action"
+  );
+
+const eaMessage =
+  document.getElementById(
+    "ea-message"
+  );
+
+const eaUpdated =
+  document.getElementById(
+    "ea-updated"
+  );
+
+
+let botEnabled = false;
+let isOwner = false;
+
+
+function setBotEnabled(value){
+
+  botEnabled =
+    Boolean(value);
+
+  enabledButton.textContent =
+    botEnabled ? "ON" : "OFF";
+
+  enabledButton.classList.toggle(
+    "on",
+    botEnabled
+  );
+
+  enabledButton.classList.toggle(
+    "off",
+    !botEnabled
+  );
+
 }
 
-async function setupPushNotifications(user) {
-  try {
-    if (!("serviceWorker" in navigator)) {
-      console.log("Service Worker tidak didukung.");
-      return;
-    }
 
-    if (!("PushManager" in window)) {
-      console.log("Push notification tidak didukung.");
-      return;
-    }
+function setControlsDisabled(
+  disabled
+){
 
-    const registration = await navigator.serviceWorker.register(
-      "/VIXO/sw.js"
-    );
+  enabledButton.disabled =
+    disabled;
 
-    console.log("VIXO Service Worker aktif.");
+  symbolInput.disabled =
+    disabled;
+
+  lotInput.disabled =
+    disabled;
+
+  maxPosInput.disabled =
+    disabled;
+
+  rrInput.disabled =
+    disabled;
+
+  sessionStartInput.disabled =
+    disabled;
+
+  sessionEndInput.disabled =
+    disabled;
+
+  saveButton.disabled =
+    disabled;
+
+}
 
 
-  let subscription =
-  await registration.pushManager.getSubscription();
+async function loadBotSettings(){
 
-if (!subscription) {
-  const permission =
-    await Notification.requestPermission();
+  const {
+    data,
+    error
+  } = await client
+    .from("vixo_bot_settings")
+    .select("*")
+    .eq("id",1)
+    .single();
 
-  if (permission !== "granted") {
-    console.log("Izin notification ditolak.");
+  if(error){
+
+    botMessage.textContent =
+      "Gagal membaca settings: "
+      + error.message;
+
     return;
   }
 
-  const VAPID_PUBLIC_KEY =
-    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEe5OUBOiuaZRWbPYyMN6fGotBNykagDpklYKqvh+KxKG3sRCiBVY/Y8K8xEv32J/jzOfT3FwhMgCFs0Kktq7Dng==";
+  setBotEnabled(
+    data.enabled
+  );
 
-  subscription =
-    await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey:
-        urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-    });
+  symbolInput.value =
+    data.symbol || "XAUUSD";
+
+  lotInput.value =
+    data.lot ?? 0.01;
+
+  maxPosInput.value =
+    data.max_positions ?? 1;
+
+  rrInput.value =
+    data.rr ?? 2;
+
+  sessionStartInput.value =
+    data.session_start ||
+    "00:00";
+
+  sessionEndInput.value =
+    data.session_end ||
+    "23:59";
+
 }
-    
-    const subscriptionJSON = subscription.toJSON();
 
-    const { error } = await client
-      .from("push_subscriptions")
-      .upsert(
+
+enabledButton.onclick =
+  () => {
+
+    if(isOwner){
+
+      setBotEnabled(
+        !botEnabled
+      );
+
+    }
+
+  };
+
+
+saveButton.onclick =
+  async () => {
+
+    if(!isOwner){
+
+      botMessage.textContent =
+        "Hanya owner yang dapat mengubah settings.";
+
+      return;
+    }
+
+
+    const symbol =
+      symbolInput.value
+        .trim()
+        .toUpperCase();
+
+    const lot =
+      Number(
+        lotInput.value
+      );
+
+    const maxPositions =
+      Math.floor(
+        Number(
+          maxPosInput.value
+        )
+      );
+
+    const rr =
+      Number(
+        rrInput.value
+      );
+
+
+    if(
+      !symbol ||
+      lot <= 0 ||
+      maxPositions < 1 ||
+      rr <= 0
+    ){
+
+      botMessage.textContent =
+        "Periksa Symbol, Lot, Max Positions, dan RR.";
+
+      return;
+    }
+
+
+    saveButton.disabled =
+      true;
+
+    botMessage.textContent =
+      "Menyimpan...";
+
+
+    const {
+      error
+    } = await client
+      .from("vixo_bot_settings")
+      .update({
+
+        enabled:
+          botEnabled,
+
+        symbol:
+          symbol,
+
+        lot:
+          lot,
+
+        max_positions:
+          maxPositions,
+
+        rr:
+          rr,
+
+        session_start:
+          sessionStartInput.value ||
+          "00:00",
+
+        session_end:
+          sessionEndInput.value ||
+          "23:59",
+
+        updated_at:
+          new Date().toISOString()
+
+      })
+      .eq("id",1);
+
+
+    saveButton.disabled =
+      false;
+
+
+    if(error){
+
+      botMessage.textContent =
+        "Gagal menyimpan: "
+        + error.message;
+
+      return;
+    }
+
+
+    botMessage.textContent =
+      "Settings berhasil disimpan.";
+
+  };
+
+
+function renderStatus(data){
+
+  if(!data)
+    return;
+
+
+  const status =
+    String(
+      data.status ||
+      "OFFLINE"
+    ).toUpperCase();
+
+
+  eaStatusBadge.textContent =
+    status;
+
+  eaAccount.textContent =
+    data.account_mode ||
+    "—";
+
+  eaSymbol.textContent =
+    data.symbol ||
+    "—";
+
+  eaSignal.textContent =
+    data.last_signal ||
+    "—";
+
+  eaAction.textContent =
+    data.last_action ||
+    "—";
+
+  eaMessage.textContent =
+    "● " +
+    (
+      data.message ||
+      "Tidak ada pesan."
+    );
+
+
+  if(data.updated_at){
+
+    eaUpdated.textContent =
+      "Last update: " +
+      new Date(
+        data.updated_at
+      ).toLocaleString(
+        "id-ID",
         {
-          user_id: user.id,
-          endpoint: subscriptionJSON.endpoint,
-          p256dh: subscriptionJSON.keys.p256dh,
-          auth: subscriptionJSON.keys.auth
-        },
-        {
-          onConflict: "endpoint"
+          day:"2-digit",
+          month:"short",
+          year:"numeric",
+          hour:"2-digit",
+          minute:"2-digit",
+          second:"2-digit"
         }
       );
 
-    if (error) {
-      console.error(
-        "Gagal menyimpan push subscription:",
-        error
-      );
-      return;
-    }
-
-    console.log("VIXO push subscription tersimpan.");
-  } catch (error) {
-    console.error("Push setup error:", error);
   }
+
 }
-  
-</script>
-  
-</body>
-</html>
+
+
+async function loadEAStatus(){
+
+  const {
+    data,
+    error
+  } = await client
+    .from("vixo_bot_status")
+    .select("*")
+    .eq("id",1)
+    .single();
+
+
+  if(!error){
+
+    renderStatus(
+      data
+    );
+
+  }
+
+}
+
+
+async function initializeVixo(
+  user
+){
+
+  isOwner =
+    Boolean(
+      user &&
+      user.email &&
+      user.email.toLowerCase() ===
+      OWNER_EMAIL.toLowerCase()
+    );
+
+
+  ownerBadge.textContent =
+    isO
