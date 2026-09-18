@@ -1419,5 +1419,342 @@ async function initializeVixo(
     );
 
 
-  ownerBadge.textContent =
-    isO
+    ownerBadge.textContent =
+    isOwner ? "OWNER" : "VIEW ONLY";
+
+  setControlsDisabled(!isOwner);
+
+  if(!isOwner){
+    botMessage.textContent =
+      "Login sebagai owner untuk mengubah settings.";
+  }
+
+  await loadBotSettings();
+  await loadEAStatus();
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+document
+  .getElementById("vixo-login-btn")
+  .onclick = async () => {
+
+    const emailValue =
+      email.value.trim();
+
+    const passwordValue =
+      password.value;
+
+    if(!emailValue || !passwordValue){
+
+      loginMessage.textContent =
+        "Email dan password wajib diisi.";
+
+      return;
+    }
+
+    loginMessage.textContent =
+      "Login...";
+
+    const {
+      data,
+      error
+    } = await client.auth.signInWithPassword({
+
+      email:
+        emailValue,
+
+      password:
+        passwordValue
+
+    });
+
+    if(error){
+
+      loginMessage.textContent =
+        "Login gagal: " +
+        error.message;
+
+      return;
+    }
+
+    if(data && data.user){
+
+      await initializeVixo(
+        data.user
+      );
+
+      screen.style.display =
+        "none";
+
+    }
+
+  };
+
+
+/* =========================
+   CREATE ACCOUNT
+========================= */
+
+document
+  .getElementById("vixo-signup-btn")
+  .onclick = async () => {
+
+    const emailValue =
+      email.value.trim();
+
+    const passwordValue =
+      password.value;
+
+    if(!emailValue || !passwordValue){
+
+      loginMessage.textContent =
+        "Isi email dan password terlebih dahulu.";
+
+      return;
+    }
+
+    if(passwordValue.length < 6){
+
+      loginMessage.textContent =
+        "Password minimal 6 karakter.";
+
+      return;
+    }
+
+    loginMessage.textContent =
+      "Membuat account...";
+
+    const {
+      error
+    } = await client.auth.signUp({
+
+      email:
+        emailValue,
+
+      password:
+        passwordValue
+
+    });
+
+    if(error){
+
+      loginMessage.textContent =
+        "Gagal membuat account: " +
+        error.message;
+
+      return;
+    }
+
+    loginMessage.textContent =
+      "Account berhasil dibuat. Silakan login.";
+
+  };
+
+
+/* =========================
+   AUTH SESSION
+========================= */
+
+async function checkSession(){
+
+  const {
+    data,
+    error
+  } = await client.auth.getSession();
+
+  if(error){
+
+    screen.style.display =
+      "flex";
+
+    return;
+  }
+
+  if(data && data.session && data.session.user){
+
+    await initializeVixo(
+      data.session.user
+    );
+
+    screen.style.display =
+      "none";
+
+  }else{
+
+    screen.style.display =
+      "flex";
+
+    setControlsDisabled(true);
+
+  }
+
+}
+
+
+/* =========================
+   AUTH STATE CHANGE
+========================= */
+
+client.auth.onAuthStateChange(
+  async (
+    event,
+    session
+  ) => {
+
+    if(
+      session &&
+      session.user
+    ){
+
+      await initializeVixo(
+        session.user
+      );
+
+      screen.style.display =
+        "none";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   INITIAL STATUS
+========================= */
+
+function setOfflineStatus(){
+
+  eaStatusBadge.textContent =
+    "OFFLINE";
+
+  eaAccount.textContent =
+    "—";
+
+  eaSymbol.textContent =
+    "—";
+
+  eaSignal.textContent =
+    "—";
+
+  eaAction.textContent =
+    "—";
+
+  eaMessage.textContent =
+    "● EA belum terhubung ke VIXO";
+
+}
+
+
+/* =========================
+   IMPROVED EA STATUS
+========================= */
+
+async function refreshEAStatus(){
+
+  const {
+    data,
+    error
+  } = await client
+    .from("vixo_bot_status")
+    .select("*")
+    .eq("id",1)
+    .single();
+
+  if(error){
+
+    setOfflineStatus();
+
+    eaUpdated.textContent =
+      "Last update: belum ada koneksi";
+
+    return;
+  }
+
+  if(!data){
+
+    setOfflineStatus();
+
+    return;
+  }
+
+  const updatedAt =
+    data.updated_at
+      ? new Date(
+          data.updated_at
+        )
+      : null;
+
+  const now =
+    Date.now();
+
+  const age =
+    updatedAt
+      ? now - updatedAt.getTime()
+      : Infinity;
+
+  /*
+    Jika EA tidak mengirim update
+    selama lebih dari 45 detik,
+    tampilkan OFFLINE.
+  */
+
+  if(age > 45000){
+
+    eaStatusBadge.textContent =
+      "OFFLINE";
+
+    eaAccount.textContent =
+      data.account_mode || "—";
+
+    eaSymbol.textContent =
+      data.symbol || "—";
+
+    eaSignal.textContent =
+      data.last_signal || "—";
+
+    eaAction.textContent =
+      data.last_action || "—";
+
+    eaMessage.textContent =
+      "● EA belum mengirim update terbaru.";
+
+  }else{
+
+    renderStatus(data);
+
+    eaStatusBadge.textContent =
+      "ONLINE";
+
+    eaMessage.textContent =
+      "● EA terhubung dan mengirim update.";
+
+  }
+
+}
+
+
+/* =========================
+   START VIXO
+========================= */
+
+setOfflineStatus();
+
+checkSession();
+
+
+/* =========================
+   AUTO REFRESH
+========================= */
+
+setInterval(
+  refreshEAStatus,
+  15000
+);
+
+</script>
