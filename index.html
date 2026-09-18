@@ -350,6 +350,54 @@ footer{
 
   <div class="title">
     <h2>Signal Board</h2>
+    <button id="add-analysis-btn" style="display:none;">
+  + ADD ANALYSIS
+</button>
+
+<div id="analysis-form" style="display:none;">
+
+  <input id="analysis-pair"
+    type="text"
+    placeholder="Pair — contoh: XAUUSD">
+
+  <select id="analysis-bias">
+    <option value="">Bias</option>
+    <option value="BULLISH">BULLISH</option>
+    <option value="BEARISH">BEARISH</option>
+    <option value="NEUTRAL">NEUTRAL</option>
+  </select>
+
+  <input id="analysis-timeframe"
+    type="text"
+    placeholder="Timeframe — contoh: M15 → M5">
+
+  <input id="analysis-area"
+    type="text"
+    placeholder="Area — contoh: Demand / RBS">
+
+  <input id="analysis-confirmation"
+    type="text"
+    placeholder="Confirmation">
+
+  <select id="analysis-status">
+    <option value="">Status</option>
+    <option value="WAITING CONFIRMATION">WAITING CONFIRMATION</option>
+    <option value="ANALYSIS ONLY">ANALYSIS ONLY</option>
+    <option value="COMPLETED">COMPLETED</option>
+  </select>
+
+  <textarea id="analysis-notes"
+    placeholder="Tulis catatan analisis..."></textarea>
+
+  <button id="publish-analysis-btn">
+    PUBLISH ANALYSIS
+  </button>
+
+  <button id="cancel-analysis-btn">
+    CANCEL
+  </button>
+
+</div>
     <p>Educational setup examples and market observations.</p>
   </div>
 
@@ -762,7 +810,29 @@ footer{
     }
   });
 
-  checkUser();
+  const OWNER_EMAIL = "tradermuda689@gmail.com";
+
+const addAnalysisBtn = document.getElementById("add-analysis-btn");
+const analysisForm = document.getElementById("analysis-form");
+const cancelAnalysisBtn = document.getElementById("cancel-analysis-btn");
+
+async function checkOwner() {
+  const { data: { user } } = await client.auth.getUser();
+
+  if (user && user.email === OWNER_EMAIL) {
+    addAnalysisBtn.style.display = "inline-block";
+  }
+}
+
+addAnalysisBtn.onclick = () => {
+  analysisForm.style.display = "block";
+};
+
+cancelAnalysisBtn.onclick = () => {
+  analysisForm.style.display = "none";
+};
+
+checkOwner();
 </script>
   
 </body>
