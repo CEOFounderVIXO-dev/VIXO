@@ -1153,25 +1153,24 @@ async function setupPushNotifications(user) {
 
     console.log("VIXO Service Worker aktif.");
 
-    let subscription =
-      await registration.pushManager.getSubscription();
-
-    if (!subscription) {
-      const permission = await Notification.requestPermission();
-
-      if (permission !== "granted") {
-        console.log("Izin notification ditolak.");
-        return;
-      }
-
-      subscription =
-        await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey:
-            urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-        });
+  if (!subscription) {
+  const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+    console.log("Izin notification ditolak.");
+    return;
     }
+  }
+      
+  const VAPID_PUBLIC_KEY =
+  "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEe5OUBOiuaZRWbPYyMN6fGotBNykagDpklYKqvh+KxKG3sRCiBVY/Y8K8xEv32J/jzOfT3FwhMgCFs0Kktq7Dng==";
 
+subscription =
+  await registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey:
+      urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+  });
+    
     const subscriptionJSON = subscription.toJSON();
 
     const { error } = await client
