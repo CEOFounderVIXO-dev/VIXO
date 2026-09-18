@@ -834,7 +834,7 @@ cancelAnalysisBtn.onclick = () => {
 
 checkOwner();
 
-  document.getElementById("publish-analysis-btn").onclick = async () => {
+document.getElementById("publish-analysis-btn").onclick = async () => {
 
   const pair = document.getElementById("analysis-pair").value.trim();
   const bias = document.getElementById("analysis-bias").value;
@@ -856,7 +856,7 @@ checkOwner();
     return;
   }
 
-  const { data, error } = await client
+  const { error } = await client
     .from("analyses")
     .insert({
       pair: pair,
@@ -867,12 +867,10 @@ checkOwner();
       status: status,
       notes: notes || null,
       created_by: user.id
-    })
-    .select()
-    .single();
+    });
 
   if (error) {
-    console.error(error);
+    console.error("SUPABASE ERROR:", error);
     alert("Gagal menyimpan analysis: " + error.message);
     return;
   }
@@ -884,41 +882,41 @@ checkOwner();
 
   card.innerHTML = `
     <div class="signal-head">
-      <div class="pair">${data.pair}</div>
+      <div class="pair">${pair}</div>
       <div class="badge">ANALYSIS</div>
     </div>
 
     <div class="row">
       <span>Bias</span>
-      <strong>${data.bias}</strong>
+      <strong>${bias}</strong>
     </div>
 
     <div class="row">
       <span>Timeframe</span>
-      <strong>${data.timeframe}</strong>
+      <strong>${timeframe}</strong>
     </div>
 
     <div class="row">
       <span>Area</span>
-      <strong>${data.area}</strong>
+      <strong>${area}</strong>
     </div>
 
     <div class="row">
       <span>Confirmation</span>
-      <strong>${data.confirmation}</strong>
+      <strong>${confirmation}</strong>
     </div>
 
     ${
-      data.notes
+      notes
       ? `<div class="row">
            <span>Notes</span>
-           <strong>${data.notes}</strong>
+           <strong>${notes}</strong>
          </div>`
       : ""
     }
 
     <div class="status">
-      • ${data.status}
+      • ${status}
     </div>
   `;
 
