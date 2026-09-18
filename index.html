@@ -833,6 +833,110 @@ cancelAnalysisBtn.onclick = () => {
 };
 
 checkOwner();
+
+  document.getElementById("publish-analysis-btn").onclick = async () => {
+
+  const pair = document.getElementById("analysis-pair").value.trim();
+  const bias = document.getElementById("analysis-bias").value;
+  const timeframe = document.getElementById("analysis-timeframe").value.trim();
+  const area = document.getElementById("analysis-area").value.trim();
+  const confirmation = document.getElementById("analysis-confirmation").value.trim();
+  const status = document.getElementById("analysis-status").value;
+  const notes = document.getElementById("analysis-notes").value.trim();
+
+  if (!pair || !bias || !timeframe || !area || !confirmation || !status) {
+    alert("Lengkapi data analysis terlebih dahulu.");
+    return;
+  }
+
+  const { data: { user } } = await client.auth.getUser();
+
+  if (!user) {
+    alert("Kamu harus login terlebih dahulu.");
+    return;
+  }
+
+  const { data, error } = await client
+    .from("analyses")
+    .insert({
+      pair: pair,
+      bias: bias,
+      timeframe: timeframe,
+      area: area,
+      confirmation: confirmation,
+      status: status,
+      notes: notes || null,
+      created_by: user.id
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    alert("Gagal menyimpan analysis: " + error.message);
+    return;
+  }
+
+  const grid = document.querySelector("#signals .grid");
+
+  const card = document.createElement("div");
+  card.className = "card signal";
+
+  card.innerHTML = `
+    <div class="signal-head">
+      <div class="pair">${data.pair}</div>
+      <div class="badge">ANALYSIS</div>
+    </div>
+
+    <div class="row">
+      <span>Bias</span>
+      <strong>${data.bias}</strong>
+    </div>
+
+    <div class="row">
+      <span>Timeframe</span>
+      <strong>${data.timeframe}</strong>
+    </div>
+
+    <div class="row">
+      <span>Area</span>
+      <strong>${data.area}</strong>
+    </div>
+
+    <div class="row">
+      <span>Confirmation</span>
+      <strong>${data.confirmation}</strong>
+    </div>
+
+    ${
+      data.notes
+      ? `<div class="row">
+           <span>Notes</span>
+           <strong>${data.notes}</strong>
+         </div>`
+      : ""
+    }
+
+    <div class="status">
+      • ${data.status}
+    </div>
+  `;
+
+  grid.prepend(card);
+
+  document.getElementById("analysis-form").style.display = "none";
+
+  document.getElementById("analysis-pair").value = "";
+  document.getElementById("analysis-bias").value = "";
+  document.getElementById("analysis-timeframe").value = "";
+  document.getElementById("analysis-area").value = "";
+  document.getElementById("analysis-confirmation").value = "";
+  document.getElementById("analysis-status").value = "";
+  document.getElementById("analysis-notes").value = "";
+
+  alert("Analysis berhasil dipublish.");
+};
+  
 </script>
   
 </body>
