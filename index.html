@@ -927,14 +927,17 @@ document.getElementById("publish-analysis-btn").onclick = async () => {
     <div class="status">
       • ${status}
     </div>
-
-    <div class="posted-time">
-      Posted: ${postedAt}
-    </div>
+    
+<div class="posted-time" style="display:block; margin-top:10px; font-size:12px; color:#9aa0a6;">
+  Posted: ${postedAt}
+</div>
   `;
 
   grid.prepend(card);
-
+showNotification(
+  "NEW ANALYSIS",
+  `${pair} baru dipublish.`
+);
   document.getElementById("analysis-form").style.display = "none";
 
   document.getElementById("analysis-pair").value = "";
@@ -1046,7 +1049,7 @@ client
 
       showNotification(
         "NEW ANALYSIS",
-        `${payload.new.pair || "Analysis"} baru dipublish.`
+        `${payload.new.pair || "Signal"} baru dipublish.`
       );
 
     }
@@ -1063,7 +1066,7 @@ client
 
       showNotification(
         "ANALYSIS UPDATED",
-        `${payload.new.pair || "Analysis"} telah diperbarui.`
+        `${payload.new.pair || "Signal"} telah diperbarui.`
       );
 
     }
@@ -1080,7 +1083,7 @@ client
 
       showNotification(
         "ANALYSIS REMOVED",
-        "Sebuah analysis telah dihapus."
+        "Signal telah dihapus."
       );
 
     }
