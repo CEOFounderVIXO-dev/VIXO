@@ -833,8 +833,27 @@ cancelAnalysisBtn.onclick = () => {
 
 checkOwner();
 
+  async function sendBrowserNotification(title, text) {
+  if (!("Notification" in window)) return;
+
+  if (Notification.permission === "default") {
+    await Notification.requestPermission();
+  }
+
+  if (Notification.permission === "granted") {
+    new Notification(title, {
+      body: text,
+      icon: "IMG_20260918_064032.jpg"
+    });
+  }
+  }
+  
 document.getElementById("publish-analysis-btn").onclick = async () => {
 
+  if ("Notification" in window && Notification.permission === "default") {
+  await Notification.requestPermission();
+  }
+  
   const pair = document.getElementById("analysis-pair").value.trim();
   const bias = document.getElementById("analysis-bias").value;
   const timeframe = document.getElementById("analysis-timeframe").value.trim();
@@ -936,6 +955,10 @@ document.getElementById("publish-analysis-btn").onclick = async () => {
   grid.prepend(card);
 showNotification(
   "NEW ANALYSIS",
+  `${pair} baru dipublish.`
+);
+  sendBrowserNotification(
+  "VIXO MARKET BOARD",
   `${pair} baru dipublish.`
 );
   document.getElementById("analysis-form").style.display = "none";
