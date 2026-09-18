@@ -784,6 +784,7 @@ footer{
 
     message.textContent = "Login berhasil.";
     screen.style.display = "none";
+    await setupPushNotifications(data.user);
   };
 
   document.getElementById("vixo-signup-btn").onclick = async () => {
