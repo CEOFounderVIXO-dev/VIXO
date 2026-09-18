@@ -480,7 +480,7 @@ footer{
       </div>
 
       <div class="status">
-        ● ANALYSIS ONLY
+        ● ANALYSIS AND SIGNAL FREE
       </div>
 
     </div>
@@ -490,7 +490,7 @@ footer{
 
   <div class="notice">
     VIXO menampilkan contoh analisis untuk pembelajaran
-    dan dokumentasi. Kondisi market dapat berubah.
+    dan signal, Kondisi market dapat berubah.
   </div>
 
 </section>
@@ -543,7 +543,7 @@ footer{
 
   <div class="title">
     <h2>Trading Journal</h2>
-    <p>Dokumentasi proses analisis dan evaluasi.</p>
+    <p>proses analisis dan evaluasi.</p>
   </div>
 
 
@@ -553,7 +553,7 @@ footer{
       <h3>Backtest</h3>
       <p class="muted">
         Catat setup, alasan entry, invalidation,
-        dan hasil backtest.
+        dan hasil trade.
       </p>
     </div>
 
@@ -570,8 +570,7 @@ footer{
     <div class="card">
       <h3>Discipline</h3>
       <p class="muted">
-        Dokumentasikan apakah keputusan mengikuti
-        trading plan atau tidak.
+        Ragumu Rugimu
       </p>
     </div>
 
@@ -590,7 +589,7 @@ footer{
     </h2>
 
     <p class="muted" style="margin-top:10px">
-      VIXO adalah konsep platform belajar yang berfokus
+      VIXO adalah konsep platform belajar signal yang berfokus
       pada technical analysis, market structure,
       price action, dan dokumentasi proses analisis.
     </p>
@@ -875,6 +874,14 @@ document.getElementById("publish-analysis-btn").onclick = async () => {
     return;
   }
 
+  const postedAt = new Date().toLocaleString("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
   const grid = document.querySelector("#signals .grid");
 
   const card = document.createElement("div");
@@ -908,15 +915,21 @@ document.getElementById("publish-analysis-btn").onclick = async () => {
 
     ${
       notes
-      ? `<div class="row">
-           <span>Notes</span>
-           <strong>${notes}</strong>
-         </div>`
-      : ""
+        ? `
+          <div class="row">
+            <span>Notes</span>
+            <strong>${notes}</strong>
+          </div>
+        `
+        : ""
     }
 
     <div class="status">
       • ${status}
+    </div>
+
+    <div class="posted-time">
+      Posted: ${postedAt}
     </div>
   `;
 
@@ -934,6 +947,146 @@ document.getElementById("publish-analysis-btn").onclick = async () => {
 
   alert("Analysis berhasil dipublish.");
 };
+
+
+/* ===============================
+   REALTIME NOTIFICATION
+   =============================== */
+
+const notificationStyle = document.createElement("style");
+
+notificationStyle.textContent = `
+  #vixo-notification {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 99999;
+    width: min(340px, calc(100vw - 40px));
+    padding: 15px 18px;
+    background: #15191a;
+    border: 1px solid #b8d13f;
+    border-left: 4px solid #b8d13f;
+    color: #edf0ee;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.45);
+    opacity: 0;
+    transform: translateY(100px);
+    transition: .3s ease;
+  }
+
+  #vixo-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #vixo-notification-title {
+    color: #b8d13f;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  #vixo-notification-text {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+`;
+
+document.head.appendChild(notificationStyle);
+
+
+const notification = document.createElement("div");
+
+notification.id = "vixo-notification";
+
+notification.innerHTML = `
+  <div id="vixo-notification-title">
+    VIXO MARKET BOARD
+  </div>
+
+  <div id="vixo-notification-text"></div>
+`;
+
+document.body.appendChild(notification);
+
+
+let notificationTimer;
+
+function showNotification(title, text) {
+
+  document.getElementById("vixo-notification-title").textContent = title;
+
+  document.getElementById("vixo-notification-text").textContent = text;
+
+  notification.classList.add("show");
+
+  clearTimeout(notificationTimer);
+
+  notificationTimer = setTimeout(() => {
+    notification.classList.remove("show");
+  }, 5000);
+}
+
+
+/* ===============================
+   REALTIME LISTENER
+   =============================== */
+
+client
+  .channel("vixo-analysis-notifications")
+
+  .on(
+    "postgres_changes",
+    {
+      event: "INSERT",
+      schema: "public",
+      table: "analyses"
+    },
+    (payload) => {
+
+      showNotification(
+        "NEW ANALYSIS",
+        `${payload.new.pair || "Analysis"} baru dipublish.`
+      );
+
+    }
+  )
+
+  .on(
+    "postgres_changes",
+    {
+      event: "UPDATE",
+      schema: "public",
+      table: "analyses"
+    },
+    (payload) => {
+
+      showNotification(
+        "ANALYSIS UPDATED",
+        `${payload.new.pair || "Analysis"} telah diperbarui.`
+      );
+
+    }
+  )
+
+  .on(
+    "postgres_changes",
+    {
+      event: "DELETE",
+      schema: "public",
+      table: "analyses"
+    },
+    (payload) => {
+
+      showNotification(
+        "ANALYSIS REMOVED",
+        "Sebuah analysis telah dihapus."
+      );
+
+    }
+  )
+
+  .subscribe();
   
 </script>
   
