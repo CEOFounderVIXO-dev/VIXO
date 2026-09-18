@@ -430,6 +430,23 @@ footer{
   font-size:12px;
 }
 
+
+/* VIXO AI CHART ANALYZER */
+.analyzer-upload{border:1px dashed #39413e;border-radius:10px;padding:18px;background:#101415}
+.analyzer-upload input[type="file"]{width:100%;color:#9da6a2;font-size:12px}
+.chart-preview{display:none;width:100%;max-height:520px;object-fit:contain;margin-top:15px;border:1px solid #303634;border-radius:8px;background:#0d1011}
+.analyzer-controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.analyzer-controls select{width:100%;padding:11px 12px;background:#0d1011;color:#edf0ee;border:1px solid #303634;border-radius:7px;outline:none}
+.analyze-chart{width:100%;margin-top:15px;padding:12px;border:1px solid #b8d13f;border-radius:7px;background:#b8d13f;color:#10130f;font-weight:bold;letter-spacing:1px;cursor:pointer}
+.analyze-chart:disabled{opacity:.45;cursor:not-allowed}
+.analyzer-result{display:none;margin-top:18px}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.result-item{padding:12px;background:#0d1011;border:1px solid #292f2d;border-radius:7px}
+.result-label{color:#747e7a;font-size:9px;font-weight:bold;letter-spacing:1px;margin-bottom:4px}
+.result-value{color:#edf0ee;font-size:13px;font-weight:bold}
+.analyzer-note{margin-top:12px;color:#8f9894;font-size:11px;line-height:1.5}
+@media(max-width:700px){.analyzer-controls,.result-grid{grid-template-columns:1fr}}
+
 @media(max-width:700px){
 
   .nav{
@@ -472,7 +489,8 @@ footer{
     <ul class="menu">
       <li><a href="#home">HOME</a></li>
       <li><a href="#signals">BOT</a></li>
-      <li><a href="#market">MARKET</a></li>
+      <li><a href="#analyzer">ANALYZER</a></li>
+            <li><a href="#market">MARKET</a></li>
       <li><a href="#journal">JOURNAL</a></li>
       <li><a href="#about">ABOUT</a></li>
     </ul>
@@ -753,6 +771,222 @@ footer{
 </section>
 
 
+
+<section id="analyzer">
+
+  <div class="title">
+    <h2>AI Chart Analyzer</h2>
+    <p>Upload screenshot chart untuk analisis struktur dan setup.</p>
+  </div>
+
+  <div class="bot-grid">
+
+    <div class="card">
+
+      <div class="signal-head">
+
+        <div>
+          <div class="pair">VIXO AI</div>
+          <div class="muted">CHART ANALYZER</div>
+        </div>
+
+        <div class="badge">
+          SCREENSHOT
+        </div>
+
+      </div>
+
+      <div class="analyzer-upload">
+
+        <input
+          id="chart-file"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+        >
+
+        <img
+          id="chart-preview"
+          class="chart-preview"
+          alt="Chart preview"
+        >
+
+      </div>
+
+      <div class="analyzer-controls">
+
+        <div class="control-field">
+
+          <label for="chart-timeframe">
+            TIMEFRAME
+          </label>
+
+          <select id="chart-timeframe">
+
+            <option value="M15">
+              M15 — STRUCTURE
+            </option>
+
+            <option value="M5">
+              M5 — ENTRY
+            </option>
+
+            <option value="M15+M5">
+              M15 + M5
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="control-field">
+
+          <label for="chart-symbol">
+            SYMBOL
+          </label>
+
+          <input
+            id="chart-symbol"
+            type="text"
+            value="XAUUSD"
+            placeholder="XAUUSD"
+          >
+
+        </div>
+
+      </div>
+
+      <button
+        id="analyze-chart"
+        class="analyze-chart"
+        type="button"
+        disabled
+      >
+        ANALYZE CHART
+      </button>
+
+      <div
+        id="analyzer-message"
+        class="bot-message"
+      >
+        Pilih screenshot chart terlebih dahulu.
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="signal-head">
+
+        <div>
+          <div class="pair">ANALYSIS</div>
+          <div class="muted">VIXO SETUP RESULT</div>
+        </div>
+
+        <div
+          id="analysis-action-badge"
+          class="badge"
+        >
+          WAIT
+        </div>
+
+      </div>
+
+      <div
+        id="analyzer-result"
+        class="analyzer-result"
+      >
+
+        <div class="result-grid">
+
+          <div class="result-item">
+            <div class="result-label">BIAS</div>
+            <div
+              id="result-bias"
+              class="result-value"
+            >—</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">ACTION</div>
+            <div
+              id="result-action"
+              class="result-value"
+            >WAIT</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">AREA</div>
+            <div
+              id="result-area"
+              class="result-value"
+            >—</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">CONFIRMATION</div>
+            <div
+              id="result-confirmation"
+              class="result-value"
+            >—</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">ENTRY</div>
+            <div
+              id="result-entry"
+              class="result-value"
+            >—</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">INVALIDATION / SL</div>
+            <div
+              id="result-sl"
+              class="result-value"
+            >—</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">TP</div>
+            <div
+              id="result-tp"
+              class="result-value"
+            >—</div>
+          </div>
+
+          <div class="result-item">
+            <div class="result-label">TIMEFRAME</div>
+            <div
+              id="result-timeframe"
+              class="result-value"
+            >—</div>
+          </div>
+
+        </div>
+
+        <div
+          class="analyzer-note"
+          id="result-reason"
+        >—</div>
+
+      </div>
+
+      <div class="notice">
+
+        Analyzer hanya memberikan analisis dari screenshot.
+        Tidak mengirim order ke MT5.
+        Jika chart tidak cukup jelas, hasil harus tetap WAIT.
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
 <section id="market">
 
   <div class="title">
@@ -862,7 +1096,7 @@ footer{
       </h3>
 
       <p class="muted">
-        Ragumu Rugimu
+                Ragumu Rugimu
       </p>
 
     </div>
@@ -920,229 +1154,124 @@ const client =
     SUPABASE_KEY
   );
 
+
 const OWNER_EMAIL =
   "tradermuda689@gmail.com";
 
 
-const loginScreen =
-  document.createElement("div");
+const ownerBadge =
+  document.getElementById("owner-badge");
 
-loginScreen.innerHTML = `
+const botEnabled =
+  document.getElementById("bot-enabled");
 
-<div id="vixo-login">
+const botSymbol =
+  document.getElementById("bot-symbol");
 
-  <div class="login-box">
+const botLot =
+  document.getElementById("bot-lot");
 
-    <div class="login-logo">
-      VIX<span>O</span>
-    </div>
+const botMaxPos =
+  document.getElementById("bot-maxpos");
 
-    <div class="login-title">
-      VIXO MARKET BOARD
-    </div>
+const botRR =
+  document.getElementById("bot-rr");
 
-    <div class="login-subtitle">
-      Login untuk mengakses VIXO.
-    </div>
+const botSessionStart =
+  document.getElementById("bot-session-start");
 
-    <input
-      id="vixo-email"
-      type="email"
-      placeholder="Email"
-      autocomplete="email"
-    >
+const botSessionEnd =
+  document.getElementById("bot-session-end");
 
-    <input
-      id="vixo-password"
-      type="password"
-      placeholder="Password"
-      autocomplete="current-password"
-    >
-
-    <button id="vixo-login-btn">
-      LOGIN
-    </button>
-
-    <button
-      id="vixo-signup-btn"
-      class="signup-btn"
-    >
-      CREATE ACCOUNT
-    </button>
-
-    <p id="vixo-message"></p>
-
-  </div>
-
-</div>
-
-`;
-
-document.body.prepend(
-  loginScreen
-);
-
-
-const screen =
-  document.getElementById(
-    "vixo-login"
-  );
-
-const email =
-  document.getElementById(
-    "vixo-email"
-  );
-
-const password =
-  document.getElementById(
-    "vixo-password"
-  );
-
-const loginMessage =
-  document.getElementById(
-    "vixo-message"
-  );
-
-
-const enabledButton =
-  document.getElementById(
-    "bot-enabled"
-  );
-
-const symbolInput =
-  document.getElementById(
-    "bot-symbol"
-  );
-
-const lotInput =
-  document.getElementById(
-    "bot-lot"
-  );
-
-const maxPosInput =
-  document.getElementById(
-    "bot-maxpos"
-  );
-
-const rrInput =
-  document.getElementById(
-    "bot-rr"
-  );
-
-const sessionStartInput =
-  document.getElementById(
-    "bot-session-start"
-  );
-
-const sessionEndInput =
-  document.getElementById(
-    "bot-session-end"
-  );
-
-const saveButton =
-  document.getElementById(
-    "save-bot-settings"
-  );
+const saveBotSettings =
+  document.getElementById("save-bot-settings");
 
 const botMessage =
-  document.getElementById(
-    "bot-message"
-  );
-
-const ownerBadge =
-  document.getElementById(
-    "owner-badge"
-  );
+  document.getElementById("bot-message");
 
 
-const eaStatusBadge =
-  document.getElementById(
-    "ea-status-badge"
-  );
-
-const eaAccount =
-  document.getElementById(
-    "ea-account"
-  );
-
-const eaSymbol =
-  document.getElementById(
-    "ea-symbol"
-  );
-
-const eaSignal =
-  document.getElementById(
-    "ea-signal"
-  );
-
-const eaAction =
-  document.getElementById(
-    "ea-action"
-  );
-
-const eaMessage =
-  document.getElementById(
-    "ea-message"
-  );
-
-const eaUpdated =
-  document.getElementById(
-    "ea-updated"
-  );
+let currentUser = null;
 
 
-let botEnabled = false;
-let isOwner = false;
+function setBotToggle(enabled){
 
-
-function setBotEnabled(value){
-
-  botEnabled =
-    Boolean(value);
-
-  enabledButton.textContent =
-    botEnabled ? "ON" : "OFF";
-
-  enabledButton.classList.toggle(
+  botEnabled.classList.remove(
     "on",
-    botEnabled
+    "off"
   );
 
-  enabledButton.classList.toggle(
-    "off",
-    !botEnabled
-  );
+  if(enabled){
+
+    botEnabled.classList.add("on");
+    botEnabled.textContent = "ON";
+
+  }else{
+
+    botEnabled.classList.add("off");
+    botEnabled.textContent = "OFF";
+
+  }
 
 }
 
 
-function setControlsDisabled(
-  disabled
-){
+botEnabled.addEventListener(
+  "click",
+  function(){
 
-  enabledButton.disabled =
-    disabled;
+    setBotToggle(
+      !botEnabled.classList.contains("on")
+    );
 
-  symbolInput.disabled =
-    disabled;
+  }
+);
 
-  lotInput.disabled =
-    disabled;
 
-  maxPosInput.disabled =
-    disabled;
+async function checkOwner(){
 
-  rrInput.disabled =
-    disabled;
+  ownerBadge.textContent =
+    "CHECKING";
 
-  sessionStartInput.disabled =
-    disabled;
+  const {
+    data,
+    error
+  } =
+    await client.auth.getSession();
 
-  sessionEndInput.disabled =
-    disabled;
+  if(error){
 
-  saveButton.disabled =
-    disabled;
+    ownerBadge.textContent =
+      "ERROR";
+
+    return;
+
+  }
+
+  currentUser =
+    data.session
+      ? data.session.user
+      : null;
+
+  if(
+    currentUser &&
+    currentUser.email === OWNER_EMAIL
+  ){
+
+    ownerBadge.textContent =
+      "OWNER";
+
+    saveBotSettings.disabled =
+      false;
+
+  }else{
+
+    ownerBadge.textContent =
+      "VIEWER";
+
+    saveBotSettings.disabled =
+      true;
+
+  }
 
 }
 
@@ -1152,609 +1281,537 @@ async function loadBotSettings(){
   const {
     data,
     error
-  } = await client
-    .from("vixo_bot_settings")
-    .select("*")
-    .eq("id",1)
-    .single();
+  } =
+    await client
+      .from("vixo_bot_settings")
+      .select("*")
+      .eq("id",1)
+      .maybeSingle();
 
   if(error){
 
     botMessage.textContent =
-      "Gagal membaca settings: "
-      + error.message;
+      "Gagal membaca settings.";
 
     return;
+
   }
 
-  setBotEnabled(
-    data.enabled
+  if(!data){
+
+    return;
+
+  }
+
+  setBotToggle(
+    !!data.enabled
   );
 
-  symbolInput.value =
-    data.symbol || "XAUUSD";
+  if(data.symbol)
+    botSymbol.value =
+      data.symbol;
 
-  lotInput.value =
-    data.lot ?? 0.01;
+  if(data.lot != null)
+    botLot.value =
+      data.lot;
 
-  maxPosInput.value =
-    data.max_positions ?? 1;
+  if(data.max_positions != null)
+    botMaxPos.value =
+      data.max_positions;
 
-  rrInput.value =
-    data.rr ?? 2;
+  if(data.rr != null)
+    botRR.value =
+      data.rr;
 
-  sessionStartInput.value =
-    data.session_start ||
-    "00:00";
+  if(data.session_start)
+    botSessionStart.value =
+      data.session_start;
 
-  sessionEndInput.value =
-    data.session_end ||
-    "23:59";
+  if(data.session_end)
+    botSessionEnd.value =
+      data.session_end;
 
 }
 
 
-enabledButton.onclick =
-  () => {
+async function saveSettings(){
 
-    if(isOwner){
-
-      setBotEnabled(
-        !botEnabled
-      );
-
-    }
-
-  };
-
-
-saveButton.onclick =
-  async () => {
-
-    if(!isOwner){
-
-      botMessage.textContent =
-        "Hanya owner yang dapat mengubah settings.";
-
-      return;
-    }
-
-
-    const symbol =
-      symbolInput.value
-        .trim()
-        .toUpperCase();
-
-    const lot =
-      Number(
-        lotInput.value
-      );
-
-    const maxPositions =
-      Math.floor(
-        Number(
-          maxPosInput.value
-        )
-      );
-
-    const rr =
-      Number(
-        rrInput.value
-      );
-
-
-    if(
-      !symbol ||
-      lot <= 0 ||
-      maxPositions < 1 ||
-      rr <= 0
-    ){
-
-      botMessage.textContent =
-        "Periksa Symbol, Lot, Max Positions, dan RR.";
-
-      return;
-    }
-
-
-    saveButton.disabled =
-      true;
+  if(
+    !currentUser ||
+    currentUser.email !== OWNER_EMAIL
+  ){
 
     botMessage.textContent =
-      "Menyimpan...";
+      "Hanya owner yang dapat menyimpan settings.";
 
-
-    const {
-      error
-    } = await client
-      .from("vixo_bot_settings")
-      .update({
-
-        enabled:
-          botEnabled,
-
-        symbol:
-          symbol,
-
-        lot:
-          lot,
-
-        max_positions:
-          maxPositions,
-
-        rr:
-          rr,
-
-        session_start:
-          sessionStartInput.value ||
-          "00:00",
-
-        session_end:
-          sessionEndInput.value ||
-          "23:59",
-
-        updated_at:
-          new Date().toISOString()
-
-      })
-      .eq("id",1);
-
-
-    saveButton.disabled =
-      false;
-
-
-    if(error){
-
-      botMessage.textContent =
-        "Gagal menyimpan: "
-        + error.message;
-
-      return;
-    }
-
-
-    botMessage.textContent =
-      "Settings berhasil disimpan.";
-
-  };
-
-
-function renderStatus(data){
-
-  if(!data)
     return;
 
+  }
 
-  const status =
-    String(
-      data.status ||
-      "OFFLINE"
-    ).toUpperCase();
+  const payload = {
+
+    id:1,
+
+    enabled:
+      botEnabled.classList.contains("on"),
+
+    symbol:
+      botSymbol.value.trim() || "XAUUSD",
+
+    lot:
+      Number(botLot.value) || 0.01,
+
+    max_positions:
+      Math.max(
+        1,
+        Number(botMaxPos.value) || 1
+      ),
+
+    rr:
+      Math.max(
+        0.1,
+        Number(botRR.value) || 2
+      ),
+
+    session_start:
+      botSessionStart.value || "00:00",
+
+    session_end:
+      botSessionEnd.value || "23:59",
+
+    updated_at:
+      new Date().toISOString()
+
+  };
 
 
-  eaStatusBadge.textContent =
-    status;
-
-  eaAccount.textContent =
-    data.account_mode ||
-    "—";
-
-  eaSymbol.textContent =
-    data.symbol ||
-    "—";
-
-  eaSignal.textContent =
-    data.last_signal ||
-    "—";
-
-  eaAction.textContent =
-    data.last_action ||
-    "—";
-
-  eaMessage.textContent =
-    "● " +
-    (
-      data.message ||
-      "Tidak ada pesan."
-    );
-
-
-  if(data.updated_at){
-
-    eaUpdated.textContent =
-      "Last update: " +
-      new Date(
-        data.updated_at
-      ).toLocaleString(
-        "id-ID",
+  const {
+    error
+  } =
+    await client
+      .from("vixo_bot_settings")
+      .upsert(
+        payload,
         {
-          day:"2-digit",
-          month:"short",
-          year:"numeric",
-          hour:"2-digit",
-          minute:"2-digit",
-          second:"2-digit"
+          onConflict:"id"
         }
       );
 
-  }
-
-}
-
-
-async function loadEAStatus(){
-
-  const {
-    data,
-    error
-  } = await client
-    .from("vixo_bot_status")
-    .select("*")
-    .eq("id",1)
-    .single();
-
-
-  if(!error){
-
-    renderStatus(
-      data
-    );
-
-  }
-
-}
-
-
-async function initializeVixo(
-  user
-){
-
-  isOwner =
-    Boolean(
-      user &&
-      user.email &&
-      user.email.toLowerCase() ===
-      OWNER_EMAIL.toLowerCase()
-    );
-
-
-    ownerBadge.textContent =
-    isOwner ? "OWNER" : "VIEW ONLY";
-
-  setControlsDisabled(!isOwner);
-
-  if(!isOwner){
-    botMessage.textContent =
-      "Login sebagai owner untuk mengubah settings.";
-  }
-
-  await loadBotSettings();
-  await loadEAStatus();
-
-}
-
-
-/* =========================
-   LOGIN
-========================= */
-
-document
-  .getElementById("vixo-login-btn")
-  .onclick = async () => {
-
-    const emailValue =
-      email.value.trim();
-
-    const passwordValue =
-      password.value;
-
-    if(!emailValue || !passwordValue){
-
-      loginMessage.textContent =
-        "Email dan password wajib diisi.";
-
-      return;
-    }
-
-    loginMessage.textContent =
-      "Login...";
-
-    const {
-      data,
-      error
-    } = await client.auth.signInWithPassword({
-
-      email:
-        emailValue,
-
-      password:
-        passwordValue
-
-    });
-
-    if(error){
-
-      loginMessage.textContent =
-        "Login gagal: " +
-        error.message;
-
-      return;
-    }
-
-    if(data && data.user){
-
-      await initializeVixo(
-        data.user
-      );
-
-      screen.style.display =
-        "none";
-
-    }
-
-  };
-
-
-/* =========================
-   CREATE ACCOUNT
-========================= */
-
-document
-  .getElementById("vixo-signup-btn")
-  .onclick = async () => {
-
-    const emailValue =
-      email.value.trim();
-
-    const passwordValue =
-      password.value;
-
-    if(!emailValue || !passwordValue){
-
-      loginMessage.textContent =
-        "Isi email dan password terlebih dahulu.";
-
-      return;
-    }
-
-    if(passwordValue.length < 6){
-
-      loginMessage.textContent =
-        "Password minimal 6 karakter.";
-
-      return;
-    }
-
-    loginMessage.textContent =
-      "Membuat account...";
-
-    const {
-      error
-    } = await client.auth.signUp({
-
-      email:
-        emailValue,
-
-      password:
-        passwordValue
-
-    });
-
-    if(error){
-
-      loginMessage.textContent =
-        "Gagal membuat account: " +
-        error.message;
-
-      return;
-    }
-
-    loginMessage.textContent =
-      "Account berhasil dibuat. Silakan login.";
-
-  };
-
-
-/* =========================
-   AUTH SESSION
-========================= */
-
-async function checkSession(){
-
-  const {
-    data,
-    error
-  } = await client.auth.getSession();
 
   if(error){
 
-    screen.style.display =
-      "flex";
+    botMessage.textContent =
+      "Gagal menyimpan: " +
+      error.message;
 
     return;
-  }
-
-  if(data && data.session && data.session.user){
-
-    await initializeVixo(
-      data.session.user
-    );
-
-    screen.style.display =
-      "none";
-
-  }else{
-
-    screen.style.display =
-      "flex";
-
-    setControlsDisabled(true);
 
   }
+
+
+  botMessage.textContent =
+    "Settings tersimpan.";
 
 }
 
 
-/* =========================
-   AUTH STATE CHANGE
-========================= */
-
-client.auth.onAuthStateChange(
-  async (
-    event,
-    session
-  ) => {
-
-    if(
-      session &&
-      session.user
-    ){
-
-      await initializeVixo(
-        session.user
-      );
-
-      screen.style.display =
-        "none";
-
-    }
-
-  }
+saveBotSettings.addEventListener(
+  "click",
+  saveSettings
 );
 
-
-/* =========================
-   INITIAL STATUS
-========================= */
-
-function setOfflineStatus(){
-
-  eaStatusBadge.textContent =
-    "OFFLINE";
-
-  eaAccount.textContent =
-    "—";
-
-  eaSymbol.textContent =
-    "—";
-
-  eaSignal.textContent =
-    "—";
-
-  eaAction.textContent =
-    "—";
-
-  eaMessage.textContent =
-    "● EA belum terhubung ke VIXO";
-
-}
-
-
-/* =========================
-   IMPROVED EA STATUS
-========================= */
 
 async function refreshEAStatus(){
 
   const {
     data,
     error
-  } = await client
-    .from("vixo_bot_status")
-    .select("*")
-    .eq("id",1)
-    .single();
+  } =
+    await client
+      .from("vixo_bot_status")
+      .select("*")
+      .eq("id",1)
+      .maybeSingle();
 
-  if(error){
 
-    setOfflineStatus();
+  const badge =
+    document.getElementById(
+      "ea-status-badge"
+    );
 
-    eaUpdated.textContent =
-      "Last update: belum ada koneksi";
+  const account =
+    document.getElementById(
+      "ea-account"
+    );
+
+  const symbol =
+    document.getElementById(
+      "ea-symbol"
+    );
+
+  const signal =
+    document.getElementById(
+      "ea-signal"
+    );
+
+  const action =
+    document.getElementById(
+      "ea-action"
+    );
+
+  const message =
+    document.getElementById(
+      "ea-message"
+    );
+
+  const updated =
+    document.getElementById(
+      "ea-updated"
+    );
+
+
+  if(
+    error ||
+    !data
+  ){
+
+    badge.textContent =
+      "OFFLINE";
+
+    message.textContent =
+      "● EA belum mengirim update terbaru.";
 
     return;
+
   }
 
-  if(!data){
 
-    setOfflineStatus();
+  account.textContent =
+    data.account_mode || "—";
 
-    return;
-  }
+  symbol.textContent =
+    data.symbol || "—";
+
+  signal.textContent =
+    data.last_signal || "—";
+
+  action.textContent =
+    data.last_action || "—";
+
 
   const updatedAt =
     data.updated_at
-      ? new Date(
-          data.updated_at
-        )
+      ? new Date(data.updated_at)
       : null;
 
-  const now =
-    Date.now();
+
+  if(!updatedAt){
+
+    badge.textContent =
+      "OFFLINE";
+
+    message.textContent =
+      "● EA belum mengirim update terbaru.";
+
+    updated.textContent =
+      "Last update: —";
+
+    return;
+
+  }
+
 
   const age =
-    updatedAt
-      ? now - updatedAt.getTime()
-      : Infinity;
+    Date.now() -
+    updatedAt.getTime();
 
-  /*
-    Jika EA tidak mengirim update
-    selama lebih dari 45 detik,
-    tampilkan OFFLINE.
-  */
 
   if(age > 45000){
 
-    eaStatusBadge.textContent =
+    badge.textContent =
       "OFFLINE";
 
-    eaAccount.textContent =
-      data.account_mode || "—";
-
-    eaSymbol.textContent =
-      data.symbol || "—";
-
-    eaSignal.textContent =
-      data.last_signal || "—";
-
-    eaAction.textContent =
-      data.last_action || "—";
-
-    eaMessage.textContent =
+    message.textContent =
       "● EA belum mengirim update terbaru.";
 
   }else{
 
-    renderStatus(data);
-
-    eaStatusBadge.textContent =
+    badge.textContent =
       "ONLINE";
 
-    eaMessage.textContent =
+    message.textContent =
       "● EA terhubung dan mengirim update.";
 
   }
 
+
+  updated.textContent =
+    "Last update: " +
+    updatedAt.toLocaleString();
+
 }
 
 
-/* =========================
-   START VIXO
-========================= */
-
-setOfflineStatus();
-
-checkSession();
-
-
-/* =========================
-   AUTO REFRESH
-========================= */
+checkOwner();
+loadBotSettings();
+refreshEAStatus();
 
 setInterval(
   refreshEAStatus,
   15000
 );
 
+
+/* AI CHART ANALYZER */
+
+const chartFile =
+  document.getElementById(
+    "chart-file"
+  );
+
+const chartPreview =
+  document.getElementById(
+    "chart-preview"
+  );
+
+const analyzeChart =
+  document.getElementById(
+    "analyze-chart"
+  );
+
+const analyzerMessage =
+  document.getElementById(
+    "analyzer-message"
+  );
+
+const analyzerResult =
+  document.getElementById(
+    "analyzer-result"
+  );
+
+
+let chartImageData = null;
+
+
+chartFile.addEventListener(
+  "change",
+  function(){
+
+    const file =
+      chartFile.files &&
+      chartFile.files[0];
+
+
+    if(!file){
+
+      chartPreview.style.display =
+        "none";
+
+      analyzeChart.disabled =
+        true;
+
+      chartImageData =
+        null;
+
+      analyzerMessage.textContent =
+        "Pilih screenshot chart terlebih dahulu.";
+
+      return;
+
+    }
+
+
+    if(
+      !file.type.startsWith(
+        "image/"
+      )
+    ){
+
+      analyzerMessage.textContent =
+        "File harus berupa gambar.";
+
+      chartFile.value = "";
+
+      return;
+
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function(event){
+
+        chartImageData =
+          event.target.result;
+
+        chartPreview.src =
+          chartImageData;
+
+        chartPreview.style.display =
+          "block";
+
+        analyzeChart.disabled =
+          false;
+
+        analyzerMessage.textContent =
+          "Chart siap dianalisis.";
+
+      };
+
+
+    reader.onerror =
+      function(){
+
+        chartImageData =
+          null;
+
+        analyzeChart.disabled =
+          true;
+
+        analyzerMessage.textContent =
+          "Gagal membaca gambar.";
+
+      };
+
+
+    reader.readAsDataURL(file);
+
+  }
+);
+
+
+function setResult(
+  bias,
+  action,
+  area,
+  confirmation,
+  entry,
+  sl,
+  tp,
+  timeframe,
+  reason
+){
+
+  document.getElementById(
+    "result-bias"
+  ).textContent =
+    bias;
+
+  document.getElementById(
+    "result-action"
+  ).textContent =
+    action;
+
+  document.getElementById(
+    "result-area"
+  ).textContent =
+    area;
+
+  document.getElementById(
+    "result-confirmation"
+  ).textContent =
+    confirmation;
+
+  document.getElementById(
+    "result-entry"
+  ).textContent =
+    entry;
+
+  document.getElementById(
+    "result-sl"
+  ).textContent =
+    sl;
+
+  document.getElementById(
+    "result-tp"
+  ).textContent =
+    tp;
+
+  document.getElementById(
+    "result-timeframe"
+  ).textContent =
+    timeframe;
+
+  document.getElementById(
+    "result-reason"
+  ).textContent =
+    reason;
+
+  document.getElementById(
+    "analysis-action-badge"
+  ).textContent =
+    action;
+
+  analyzerResult.style.display =
+    "block";
+
+}
+
+
+analyzeChart.addEventListener(
+  "click",
+  async function(){
+
+    if(!chartImageData){
+
+      analyzerMessage.textContent =
+        "Upload chart terlebih dahulu.";
+
+      return;
+
+    }
+
+
+    analyzeChart.disabled =
+      true;
+
+    analyzerMessage.textContent =
+      "Menyiapkan analisis...";
+
+
+    /*
+      Backend AI VIXO belum terhubung.
+      Analyzer frontend ini hanya menyiapkan
+      screenshot dan tampilan hasil.
+    */
+
+
+    setTimeout(
+      function(){
+
+        setResult(
+          "WAIT",
+          "WAIT",
+          "Belum tersedia",
+          "Belum tersedia",
+          "—",
+          "—",
+          "—",
+          document.getElementById(
+            "chart-timeframe"
+          ).value,
+          "Backend AI Vision VIXO belum terhubung. Screenshot sudah diterima, tetapi belum ada engine AI yang membaca chart."
+        );
+
+
+        analyzerMessage.textContent =
+          "Screenshot diterima. Backend AI belum terhubung.";
+
+        analyzeChart.disabled =
+          false;
+
+      },
+      600
+    );
+
+  }
+);
+
+
 </script>
+
+</body>
+</html>
