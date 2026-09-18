@@ -796,84 +796,97 @@ footer{
 
       </div>
 
-      <div class="analyzer-upload">
+<div class="analyzer-upload">
 
-        <input
-          id="chart-file"
-          type="file"
-          accept="image/png,image/jpeg,image/webp"
-        >
+  <div class="control-field">
+    <label for="chart-m15">M15 — BIAS / TREND</label>
+    <input
+      id="chart-m15"
+      type="file"
+      accept="image/png,image/jpeg,image/webp"
+    >
+    <img
+      id="chart-preview-m15"
+      class="chart-preview"
+      alt="M15 chart preview"
+    >
+  </div>
 
-        <img
-          id="chart-preview"
-          class="chart-preview"
-          alt="Chart preview"
-        >
+  <div class="control-field">
+    <label for="chart-m5">M5 — STRUCTURE / FRESH POI</label>
+    <input
+      id="chart-m5"
+      type="file"
+      accept="image/png,image/jpeg,image/webp"
+    >
+    <img
+      id="chart-preview-m5"
+      class="chart-preview"
+      alt="M5 chart preview"
+    >
+  </div>
 
-      </div>
+  <div class="control-field">
+    <label for="chart-m1">M1 — FINAL 3-CANDLE CONFIRMATION</label>
+    <input
+      id="chart-m1"
+      type="file"
+      accept="image/png,image/jpeg,image/webp"
+    >
+    <img
+      id="chart-preview-m1"
+      class="chart-preview"
+      alt="M1 chart preview"
+    >
+  </div>
 
-      <div class="analyzer-controls">
+</div>
 
-        <div class="control-field">
+<div class="analyzer-controls">
 
-          <label for="chart-timeframe">
-            TIMEFRAME
-          </label>
+  <div class="control-field">
+    <label for="chart-symbol">
+      SYMBOL
+    </label>
 
-          <select id="chart-timeframe">
+    <input
+      id="chart-symbol"
+      type="text"
+      value="XAUUSD"
+      placeholder="XAUUSD"
+    >
+  </div>
 
-            <option value="M15">
-              M15 — STRUCTURE
-            </option>
+</div>
 
-            <option value="M5">
-              M5 — ENTRY
-            </option>
+<div class="analyzer-note">
+  FLOW ANALYSIS:
+  <br>
+  M15 → M5 → M1
+  <br>
+  M15 = Bias / Trend |
+  <br>
+  M5 = Structure + Fresh POI |
+  <br>
+  M1 = Final 3-Candle Confirmation
+</div>
 
-            <option value="M15+M5">
-              M15 + M5
-            </option>
+<button
+  id="analyze-chart"
+  class="analyze-chart"
+  type="button"
+  disabled
+>
+  ANALYZE CHART
+</button>
 
-          </select>
-
-        </div>
-
-        <div class="control-field">
-
-          <label for="chart-symbol">
-            SYMBOL
-          </label>
-
-          <input
-            id="chart-symbol"
-            type="text"
-            value="XAUUSD"
-            placeholder="XAUUSD"
-          >
-
-        </div>
-
-      </div>
-
-      <button
-        id="analyze-chart"
-        class="analyze-chart"
-        type="button"
-        disabled
-      >
-        ANALYZE CHART
-      </button>
-
-      <div
-        id="analyzer-message"
-        class="bot-message"
-      >
-        Pilih screenshot chart terlebih dahulu.
-      </div>
-
-    </div>
-
-
+<div
+  id="analyzer-message"
+  class="bot-message"
+>
+  Upload screenshot M15, M5, dan M1 terlebih dahulu.
+</div>
+      
     <div class="card">
 
       <div class="signal-head">
@@ -1561,125 +1574,177 @@ setInterval(
   15000
 );
 
-
 /* AI CHART ANALYZER */
 
-const chartFile =
-  document.getElementById(
-    "chart-file"
-  );
+const chartM15 =
+  document.getElementById("chart-m15");
 
-const chartPreview =
-  document.getElementById(
-    "chart-preview"
-  );
+const chartM5 =
+  document.getElementById("chart-m5");
+
+const chartM1 =
+  document.getElementById("chart-m1");
+
+const previewM15 =
+  document.getElementById("chart-preview-m15");
+
+const previewM5 =
+  document.getElementById("chart-preview-m5");
+
+const previewM1 =
+  document.getElementById("chart-preview-m1");
+
+const chartSymbol =
+  document.getElementById("chart-symbol");
 
 const analyzeChart =
-  document.getElementById(
-    "analyze-chart"
-  );
+  document.getElementById("analyze-chart");
 
 const analyzerMessage =
-  document.getElementById(
-    "analyzer-message"
-  );
+  document.getElementById("analyzer-message");
 
 const analyzerResult =
-  document.getElementById(
-    "analyzer-result"
-  );
+  document.getElementById("analyzer-result");
 
 
-let chartImageData = null;
+let chartImages = {
+  M15: null,
+  M5: null,
+  M1: null
+};
 
 
-chartFile.addEventListener(
-  "change",
-  function(){
+function updateAnalyzeButton(){
 
-    const file =
-      chartFile.files &&
-      chartFile.files[0];
+  const ready =
+    !!chartImages.M15 &&
+    !!chartImages.M5 &&
+    !!chartImages.M1;
 
+  analyzeChart.disabled = !ready;
 
-    if(!file){
+  if(ready){
 
-      chartPreview.style.display =
-        "none";
-
-      analyzeChart.disabled =
-        true;
-
-      chartImageData =
-        null;
-
-      analyzerMessage.textContent =
-        "Pilih screenshot chart terlebih dahulu.";
-
-      return;
-
-    }
-
-
-    if(
-      !file.type.startsWith(
-        "image/"
-      )
-    ){
-
-      analyzerMessage.textContent =
-        "File harus berupa gambar.";
-
-      chartFile.value = "";
-
-      return;
-
-    }
-
-
-    const reader =
-      new FileReader();
-
-
-    reader.onload =
-      function(event){
-
-        chartImageData =
-          event.target.result;
-
-        chartPreview.src =
-          chartImageData;
-
-        chartPreview.style.display =
-          "block";
-
-        analyzeChart.disabled =
-          false;
-
-        analyzerMessage.textContent =
-          "Chart siap dianalisis.";
-
-      };
-
-
-    reader.onerror =
-      function(){
-
-        chartImageData =
-          null;
-
-        analyzeChart.disabled =
-          true;
-
-        analyzerMessage.textContent =
-          "Gagal membaca gambar.";
-
-      };
-
-
-    reader.readAsDataURL(file);
+    analyzerMessage.textContent =
+      "3 screenshot siap. M15 → M5 → M1. Tekan ANALYZE CHART.";
 
   }
+
+}
+
+
+function handleChartUpload(
+  input,
+  preview,
+  timeframe
+){
+
+  input.addEventListener(
+    "change",
+    function(){
+
+      const file =
+        input.files &&
+        input.files[0];
+
+      if(!file){
+
+        chartImages[timeframe] = null;
+
+        preview.src = "";
+        preview.style.display = "none";
+
+        updateAnalyzeButton();
+
+        return;
+
+      }
+
+
+      if(!file.type.startsWith("image/")){
+
+        input.value = "";
+
+        chartImages[timeframe] = null;
+
+        preview.src = "";
+        preview.style.display = "none";
+
+        analyzerMessage.textContent =
+          timeframe +
+          " harus berupa file gambar.";
+
+        updateAnalyzeButton();
+
+        return;
+
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(event){
+
+          chartImages[timeframe] =
+            event.target.result;
+
+          preview.src =
+            chartImages[timeframe];
+
+          preview.style.display =
+            "block";
+
+          updateAnalyzeButton();
+
+        };
+
+
+      reader.onerror =
+        function(){
+
+          chartImages[timeframe] =
+            null;
+
+          preview.src = "";
+          preview.style.display = "none";
+
+          analyzerMessage.textContent =
+            "Gagal membaca screenshot " +
+            timeframe +
+            ".";
+
+          updateAnalyzeButton();
+
+        };
+
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+}
+
+
+handleChartUpload(
+  chartM15,
+  previewM15,
+  "M15"
+);
+
+handleChartUpload(
+  chartM5,
+  previewM5,
+  "M5"
+);
+
+handleChartUpload(
+  chartM1,
+  previewM1,
+  "M1"
 );
 
 
@@ -1698,156 +1763,311 @@ function setResult(
   document.getElementById(
     "result-bias"
   ).textContent =
-    bias;
+    bias || "—";
+
 
   document.getElementById(
     "result-action"
   ).textContent =
-    action;
+    action || "WAIT";
+
 
   document.getElementById(
     "result-area"
   ).textContent =
-    area;
+    area || "—";
+
 
   document.getElementById(
     "result-confirmation"
   ).textContent =
-    confirmation;
+    confirmation || "—";
+
 
   document.getElementById(
     "result-entry"
   ).textContent =
-    entry;
+    entry ?? "—";
+
 
   document.getElementById(
     "result-sl"
   ).textContent =
-    sl;
+    sl ?? "—";
+
 
   document.getElementById(
     "result-tp"
   ).textContent =
-    tp;
+    tp ?? "—";
+
 
   document.getElementById(
     "result-timeframe"
   ).textContent =
-    timeframe;
+    timeframe || "M15 + M5 + M1";
+
 
   document.getElementById(
     "result-reason"
   ).textContent =
-    reason;
+    reason || "—";
+
 
   document.getElementById(
     "analysis-action-badge"
   ).textContent =
-    action;
+    action || "WAIT";
+
 
   analyzerResult.style.display =
     "block";
 
 }
 
-analyzeChartButton.addEventListener("click", async ()=>{
-  if(!selectedChartDataUrl)return;
 
-  analyzeChartButton.disabled=true;
-  analyzerMessage.textContent="Menganalisis screenshot dengan VIXO SS Analyzer...";
+analyzeChart.addEventListener(
+  "click",
+  async function(){
 
-  setSSResult({
-    bias:"ANALYZING",
-    action:"WAIT",
-    area:"—",
-    confirmation:"—",
-    entry:"—",
-    sl:"—",
-    tp:"—",
-    status:"WAIT",
-    reason:"AI sedang membaca M15, M5, dan M1 sesuai rule VIXO."
-  });
+    if(
+      !chartImages.M15 ||
+      !chartImages.M5 ||
+      !chartImages.M1
+    ){
 
-  try{
-    const {
-      data:{session},
-      error:sessionError
-    } = await client.auth.getSession();
+      analyzerMessage.textContent =
+        "Upload M15, M5, dan M1 terlebih dahulu.";
 
-    if(sessionError || !session){
-      throw new Error("Sesi login VIXO tidak ditemukan.");
+      return;
+
     }
 
-    const response = await fetch(
-      SUPABASE_URL + "/functions/v1/vixo-ss-analyzer",
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Authorization":"Bearer " + session.access_token,
-          "apikey":SUPABASE_KEY
-        },
-        body:JSON.stringify({
-          image:selectedChartDataUrl,
-          symbol:(chartSymbol.value || "XAUUSD").trim().toUpperCase(),
-          timeframe:"M15+M5+M1"
-        })
-      }
+
+    analyzeChart.disabled = true;
+
+
+    analyzerMessage.textContent =
+      "VIXO AI sedang menganalisis... M15 → M5 → M1. Reading market structure...";
+
+
+    setResult(
+      "ANALYZING",
+      "WAIT",
+      "—",
+      "CHECKING",
+      "—",
+      "—",
+      "—",
+      "M15 + M5 + M1",
+      "AI sedang membaca bias M15, structure + fresh POI M5, dan final 3-candle confirmation M1."
     );
 
-    const data = await response.json();
 
-    if(!response.ok){
-      throw new Error(data.error || "Analyzer gagal memproses screenshot.");
+    try{
+
+      const {
+        data: {
+          session
+        },
+        error: sessionError
+      } =
+        await client.auth.getSession();
+
+
+      if(
+        sessionError ||
+        !session
+      ){
+
+        throw new Error(
+          "Sesi login VIXO tidak ditemukan."
+        );
+
+      }
+
+
+      const symbol =
+        (
+          chartSymbol.value ||
+          "XAUUSD"
+        )
+        .trim()
+        .toUpperCase();
+
+
+      const response =
+        await fetch(
+          SUPABASE_URL +
+          "/functions/v1/vixo-ss-analyzer-v2",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              "Authorization":
+                "Bearer " +
+                session.access_token,
+
+              "apikey":
+                SUPABASE_KEY
+            },
+
+            body:
+              JSON.stringify({
+
+                symbol: symbol,
+
+                images: {
+                  M15:
+                    chartImages.M15,
+
+                  M5:
+                    chartImages.M5,
+
+                  M1:
+                    chartImages.M1
+                }
+
+              })
+          }
+        );
+
+
+      let data;
+
+      try{
+
+        data =
+          await response.json();
+
+      }catch{
+
+        throw new Error(
+          "Server analyzer mengirim response yang tidak valid."
+        );
+
+      }
+
+
+      if(!response.ok){
+
+        throw new Error(
+          data.error ||
+          "VIXO SS Analyzer gagal memproses screenshot."
+        );
+
+      }
+
+
+      const candles =
+        Number(
+          data.confirmation_candles ?? 0
+        );
+
+
+      const confirmation =
+        candles +
+        "/3" +
+        (
+          data.m1_confirmation &&
+          data.m1_confirmation !== "UNKNOWN"
+            ? " " +
+              data.m1_confirmation
+            : ""
+        );
+
+
+      setResult(
+
+        data.m15_bias ||
+          "—",
+
+        data.action ||
+          "WAIT",
+
+        data.poi ||
+          "—",
+
+        confirmation,
+
+        data.entry ??
+          "—",
+
+        data.sl ??
+          "—",
+
+        data.tp ??
+          "—",
+
+        "M15 + M5 + M1",
+
+        data.reason ||
+          "—"
+
+      );
+
+
+      if(
+        data.action === "BUY"
+      ){
+
+        analyzerMessage.textContent =
+          "VIXO selesai: BUY NOW🔥🔥.";
+
+      }else if(
+        data.action === "SELL"
+      ){
+
+        analyzerMessage.textContent =
+          "VIXO selesai: SELL NOW🔥🔥.";
+
+      }else{
+
+        analyzerMessage.textContent =
+          "VIXO selesai: WAIT. Setup belum memenuhi seluruh rule.";
+
+      }
+
+
+    }catch(error){
+
+      setResult(
+        "—",
+        "WAIT",
+        "—",
+        "—",
+        "—",
+        "—",
+        "—",
+        "M15 + M5 + M1",
+        error.message ||
+        "Terjadi kesalahan saat analisis."
+      );
+
+
+      analyzerMessage.textContent =
+        "Analisis gagal: " +
+        (
+          error.message ||
+          "unknown error"
+        );
+
+    }finally{
+
+      analyzeChart.disabled =
+        !(
+          chartImages.M15 &&
+          chartImages.M5 &&
+          chartImages.M1
+        );
+
     }
 
-    setSSResult({
-      bias:data.m15_bias || "—",
-      action:data.action || "WAIT",
-      area:data.poi || "—",
-      confirmation:
-        (data.confirmation_candles ?? 0) + "/3" +
-        (data.m1_confirmation && data.m1_confirmation !== "UNKNOWN"
-          ? " " + data.m1_confirmation
-          : ""),
-      entry:data.entry ?? "—",
-      sl:data.sl ?? "—",
-      tp:data.tp ?? "—",
-      status:data.status || "WAIT",
-      reason:data.reason || "—"
-    });
-
-    resultTimeframe.textContent="M15 + M5 + M1";
-
-    analyzerMessage.textContent =
-      data.action === "BUY"
-        ? "VIXO mendeteksi setup BUY berdasarkan rule yang terpenuhi."
-        : data.action === "SELL"
-        ? "VIXO mendeteksi setup SELL berdasarkan rule yang terpenuhi."
-        : "VIXO belum mendapatkan setup lengkap. WAITING!!.";
-
-  }catch(error){
-
-    setSSResult({
-      bias:"—",
-      action:"WAIT",
-      area:"—",
-      confirmation:"—",
-      entry:"—",
-      sl:"—",
-      tp:"—",
-      status:"WAIT",
-      reason:error.message || "Terjadi kesalahan saat analisis."
-    });
-
-    analyzerMessage.textContent =
-      "Analisis gagal: " + (error.message || "unknown error");
-
-  }finally{
-    analyzeChartButton.disabled=false;
   }
-});
-
+);
 
 </script>
 
