@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIXO — Certificate Verification</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, #182238 0%, #090d15 45%, #05070b 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: rgba(15, 21, 34, 0.94);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 22px;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    .brand {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #9da8ba;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .description {
+      color: #aeb7c7;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(45, 190, 110, 0.12);
+      border: 1px solid rgba(45, 190, 110, 0.35);
+      color: #55e39a;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .item {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .label {
+      color: #7f8a9e;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 7px;
+    }
+
+    .value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .qr-section {
+      margin-top: 28px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+    }
+
+    .qr-section img {
+      width: 180px;
+      height: 180px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .qr-text {
+      color: #8f99aa;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    .notice {
+      margin-top: 25px;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.035);
+      color: #aeb7c7;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    footer {
+      margin-top: 28px;
+      text-align: center;
+      color: #687386;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 23px;
+      }
+
+      .details {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="card">
+
+    <div class="brand">VIXO</div>
+    <div class="subtitle">CERTIFICATE VERIFICATION</div>
+
+    <h1>Founder Certificate</h1>
+
+    <p class="description">
+      Official VIXO verification record for the certificate shown below.
+    </p>
+
+    <div class="status">
+      ✓ VERIFIED RECORD
+    </div>
+
+    <div class="details">
+
+      <div class="item">
+        <div class="label">Certificate No.</div>
+        <div class="value">VIXO-FND-2025-001</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Status</div>
+        <div class="value">VALID / ACTIVE</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Recipient</div>
+        <div class="value">Kennlyy</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Position</div>
+        <div class="value">Founder of VIXO</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Date of Issue</div>
+        <div class="value">18 September 2025</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Issued By</div>
+        <div class="value">VIXO</div>
+      </div>
+
+    </div>
+
+    <div class="qr-section">
+      <img
+        src="../../assets/vixo-founder-qr.svg"
+        alt="VIXO Certificate Verification QR Code"
+      >
+
+      <div class="qr-text">
+        Scan the QR code to verify this certificate record.
+      </div>
+    </div>
+
+    <div class="notice">
+      This page confirms that certificate number
+      <strong>VIXO-FND-2025-001</strong>
+      corresponds to the verification record above.
+      Please compare the certificate number and recipient name
+      with the physical or digital certificate.
+    </div>
+
+    <footer>
+      © 2026 VIXO · Certificate Verification
+    </footer>
+
+  </main>
+
+</body>
+</html>
